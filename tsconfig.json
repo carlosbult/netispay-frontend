@@ -1,0 +1,41 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "types": ["react"],
+    "baseUrl": "./",
+    "paths": {
+      "@public/*": ["./public/*"],
+      "@components/*": ["src/shared/components/*"],
+      "@services/*": ["./src/services/*"],
+      "@interfaces/*": ["src/interfaces/*"],
+      "@lib/*": ["src/lib/*"]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "include": [
+    "src",
+    "public",
+    "next-env.d.ts",
+    ".next/types/**/*.ts",
+    "tailwind.config.ts" // Añadir esta línea
+  ],
+  "exclude": ["node_modules"]
+}

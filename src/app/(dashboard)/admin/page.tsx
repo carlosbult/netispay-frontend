@@ -1,19 +1,17 @@
-'use client';
-
 import { Card, CardContent, CardHeader, CardTitle } from '@components/ui/card';
-import { useState } from 'react';
 import { DataTable } from 'src/app/(dashboard)/admin/_components/DataTable';
 import MaxWidthWrapper from 'src/components/MaxWidthWrapper';
 import { formatCurrency } from 'src/lib/fomartCurrency';
-import { PaymentDetails } from 'src/modules/users/admin/components/PaymentDetails';
-import { columns } from 'src/modules/users/admin/components/PaymentTableColumns';
-import {
-  type Payment,
-  payments,
-} from 'src/modules/users/admin/components/data';
+import { handlerGetTransactions } from './settings/actions';
 
-const Component = () => {
-  const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
+const Page = async () => {
+  const payments = await handlerGetTransactions(10, 1);
+  // const [selectedPayment, setSelectedPayment] = useState<Transaction | null>(
+  //   null,
+  // );
+  if ('errorCode' in payments) {
+    return <div>Error: {payments.message}</div>;
+  }
   return (
     // <div className="h-screen flex flex-col p-2 gap-4">
     <MaxWidthWrapper className="space-y-4">
@@ -78,30 +76,30 @@ const Component = () => {
       </div>
 
       <div
-        className={`grid transition-all duration-300 ${
-          selectedPayment !== null ? 'grid-cols-[3fr_1fr]' : 'grid-cols-1'
-        } gap-4 overflow-hidden`}
+      // className={`grid transition-all duration-300 ${
+      //   selectedPayment !== null ? 'grid-cols-[3fr_1fr]' : 'grid-cols-1'
+      // } gap-4 overflow-hidden`}
       >
         {/* Panel izquierdo con la tabla */}
         <DataTable
-          columns={columns}
-          data={payments}
-          onRowClick={(payment) => {
-            setSelectedPayment(payment);
-          }}
+          // columns={columns}
+          data={payments.transactions}
+          // onRowClick={(payment) => {
+          //   setSelectedPayment(payment);
+          // }}
         />
 
         {/* Panel derecho con detalles */}
-        {selectedPayment !== null && (
+        {/* {selectedPayment !== null && (
           <PaymentDetails
             payment={selectedPayment}
             onClose={() => {
               setSelectedPayment(null);
             }}
           />
-        )}
+        )} */}
       </div>
     </MaxWidthWrapper>
   );
 };
-export default Component;
+export default Page;

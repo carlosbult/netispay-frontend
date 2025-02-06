@@ -2,6 +2,7 @@
 
 import { type ApiErrorResponse } from '@interfaces/errors.interface';
 import { type BankPaymentProduct } from '@interfaces/paymentMethods.interface';
+import { requestGetTransaction } from '@lib/request/server/getTransactions';
 import updateBankProduct from '@lib/request/server/updateBankProduct';
 import updateIspConfig from '@lib/request/server/updateIspConfig';
 
@@ -111,5 +112,16 @@ export const handlerUpdateBankProduct = async (
   id: string,
 ) => {
   const response = await updateBankProduct(data, id);
+  return response;
+};
+
+//*
+//* Get Transactions
+//*
+export const handlerGetTransactions = async (limit: number, offset: number) => {
+  const response = await requestGetTransaction({
+    limit,
+    offset,
+  });
   return response;
 };

@@ -1,22 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { TablePagination } from '@components/TablePagination';
+import { Table, TableHead, TableHeader, TableRow } from '@components/ui/table';
 import {
   type ColumnDef,
   flexRender,
   getCoreRowModel,
-  useReactTable,
   getPaginationRowModel,
+  useReactTable,
 } from '@tanstack/react-table';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@components/ui/table';
-import { TablePagination } from '@components/TablePagination';
+import { useState } from 'react';
 
 interface DataTableProps<TData, TValue> {
   columns: Array<ColumnDef<TData, TValue>>;
@@ -66,7 +59,7 @@ export const DataTable = <TData, TValue>({
                 </TableRow>
               ))}
             </TableHeader>
-            <TableBody>
+            {/* <TableBody>
               {table.getRowModel().rows?.length !== 0 ? (
                 table.getRowModel().rows.map((row) => (
                   <TableRow
@@ -95,7 +88,7 @@ export const DataTable = <TData, TValue>({
                   </TableCell>
                 </TableRow>
               )}
-            </TableBody>
+            </TableBody> */}
           </Table>
         </div>
 

@@ -50,7 +50,24 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
 
   // Get auth tokens
   const authToken = request.cookies.get('session_token');
-  const tokenExpires = request.cookies.get('token_expires');
+  // const tokenExpires = request.cookies.get('token_expires');
+  const authData = request.cookies.get('auth_data');
+  const tokenExpires: string | null =
+    authData != null ? JSON.parse(authData.value) : null;
+  // get data for localstorage
+  // if (typeof window !== 'undefined') {
+  //   const userId = localStorage.getItem('userId');
+  //   const userRole = localStorage.getItem('userRole');
+
+  //   if (userRole != null) {
+  //     // If user data exists in localStorage, redirect to dashboard
+  //     if (userRole === 'admin') {
+  //       return NextResponse.redirect(new URL('/admin', request.url));
+  //     } else {
+  //       return NextResponse.redirect(new URL('/overview', request.url));
+  //     }
+  //   }
+  // }
 
   if (pathname === '/') {
     return NextResponse.redirect(new URL('/overview', request.url));
@@ -77,7 +94,7 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
 
   // Check token expiration
   const currentTime = Date.now();
-  const expirationTime = new Date(tokenExpires?.value).getTime();
+  const expirationTime = new Date(tokenExpires).getTime();
 
   if (currentTime >= expirationTime) {
     const response = NextResponse.redirect(new URL('/sign-in', request.url));

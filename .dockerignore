@@ -1,0 +1,47 @@
+# Node.js
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Nest.js
+dist
+
+# Next.js
+.next
+out
+build
+node_modules
+
+# Docker
+.dockerignore
+.dockerfile
+.dockerignore
+Dockerfile*
+.dockerfile*
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Editor
+.vscode
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw*
+*.bak
+*.cache
+*.log
+*.DS_Store
+
+# Dependencies
+*.pnp.js
+.pnp.*
+
+# Additional files and directories
+.env
+.env.*
+coverage

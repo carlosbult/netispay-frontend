@@ -23,7 +23,7 @@ const NavbarMenu = () => {
       document.cookie =
         'session_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
       document.cookie =
-        'token_expires=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        'auth_data=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
 
       router.replace('/sign-in');
     }

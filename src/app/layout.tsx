@@ -9,7 +9,7 @@ import { ReactQueryClientProvider } from './ReactQueryClientProvider';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Netispay',
+  title: 'Suppli 360 - ISPayment',
   description: 'Bienvenido a Suppli 360 - ISPayment',
   icons: {
     icon: ['/favicon/favicon.ico?v=4'],

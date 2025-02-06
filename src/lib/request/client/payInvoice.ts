@@ -1,7 +1,6 @@
 import { type ILoginResponseSuccessfully } from '@interfaces/auth.interface';
 import { type IPayInvoiceAdapter } from '@lib/adapters/payInvoice-validator';
-import { API_BASE_URL } from '@services/api/api.service';
-import { getApiUrl } from '../../getApiUrl'
+import { getApiUrl } from '../../getApiUrl';
 
 const payInvoiceInFetch = async (data: IPayInvoiceAdapter) => {
   try {

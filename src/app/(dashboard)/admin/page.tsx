@@ -1,10 +1,9 @@
 'use client';
 
-import { DataTable } from '@components/DataTable';
-import { Button } from '@components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@components/ui/card';
-import { Banknote, Calendar, CreditCard, Landmark } from 'lucide-react';
 import { useState } from 'react';
+import { DataTable } from 'src/app/(dashboard)/admin/_components/DataTable';
+import MaxWidthWrapper from 'src/components/MaxWidthWrapper';
 import { formatCurrency } from 'src/lib/fomartCurrency';
 import { PaymentDetails } from 'src/modules/users/admin/components/PaymentDetails';
 import { columns } from 'src/modules/users/admin/components/PaymentTableColumns';
@@ -16,8 +15,9 @@ import {
 const Component = () => {
   const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
   return (
-    <div className="h-screen flex flex-col p-2 gap-4">
-      <div className="flex justify-between items-center">
+    // <div className="h-screen flex flex-col p-2 gap-4">
+    <MaxWidthWrapper className="space-y-4">
+      {/* <div className="flex justify-between items-center pt-4">
         <h1 className="text-3xl font-bold">Pagos</h1>
         <div className="flex items-center space-x-4">
           <Button variant="outline">
@@ -37,7 +37,7 @@ const Component = () => {
             Fecha
           </Button>
         </div>
-      </div>
+      </div> */}
 
       <div className="grid md:grid-cols-5 grid-cols-2 gap-4">
         <Card>
@@ -101,7 +101,7 @@ const Component = () => {
           />
         )}
       </div>
-    </div>
+    </MaxWidthWrapper>
   );
 };
 export default Component;

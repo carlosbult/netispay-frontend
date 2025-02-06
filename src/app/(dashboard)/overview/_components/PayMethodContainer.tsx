@@ -1,6 +1,7 @@
 import { type BankPaymentProduct } from '@interfaces/paymentMethods.interface';
 import BankTransfer from './BankTransfer';
 import Crypto from './Crypto';
+import PayPal from './PayPal';
 
 interface IPaymentMethodContainerProps {
   method: string;
@@ -18,6 +19,8 @@ const PaymentMethodContainer = (props: IPaymentMethodContainerProps) => {
     return <BankTransfer bankProducts={bankProducts} />;
 
   if (method === 'binance') return <Crypto bankProducts={bankProducts} />;
+
+  if (method === 'payPal') return <PayPal />;
 
   return <div>PaymethodContainer</div>;
 };

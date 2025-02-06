@@ -39,8 +39,11 @@ const LoginForm = () => {
   if (signIn.isSuccess) {
     const isValid = signIn.data.data;
     if (isValid != null) {
-      console.log(isValid);
-      router.push('/overview');
+      if (signIn.data.data.session.userRole === 'ADMIN') {
+        router.push('/admin');
+      } else {
+        router.push('/overview');
+      }
     }
   }
 

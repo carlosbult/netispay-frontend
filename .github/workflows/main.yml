@@ -22,8 +22,8 @@ jobs:
         run: |
           VERSION=$(git rev-parse --short HEAD)
           docker build \
-            --build-arg NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }} \
-            --build-arg BASE_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }} \
+            --build-arg NEXT_PUBLIC_API_URL="${{ secrets.NEXT_PUBLIC_API_URL }}" \
+            --build-arg BASE_API_URL="${{ secrets.NEXT_PUBLIC_API_URL }}" \
             --no-cache \
             -t ${{ secrets.REGISTRY_URL }}/${{ secrets.IMAGE_ALIAS }}:$VERSION .
           docker tag ${{ secrets.REGISTRY_URL }}/${{ secrets.IMAGE_ALIAS }}:$VERSION ${{ secrets.REGISTRY_URL }}/${{ secrets.IMAGE_ALIAS }}:latest

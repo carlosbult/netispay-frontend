@@ -45,7 +45,7 @@ export const TablePagination = <TData,>({
   const pageSize = table.getState().pagination.pageSize;
 
   return (
-    <div className="border-t p-2">
+    <div className="p-2 mt-2">
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div className="text-sm text-gray-500">
           Viendo {startIndex} - {endIndex} de {totalItems} registros
@@ -72,6 +72,7 @@ export const TablePagination = <TData,>({
                 <>
                   <PaginationItem>
                     <PaginationLink
+                      className={`rounded-xl ${currentPage === startPage ? '' : 'cursor-pointer'}`}
                       onClick={() => {
                         table.setPageIndex(0);
                       }}
@@ -87,6 +88,7 @@ export const TablePagination = <TData,>({
               {pages.map((page) => (
                 <PaginationItem key={page}>
                   <PaginationLink
+                    className={`rounded-xl ${currentPage === page ? '' : 'cursor-pointer'}`}
                     onClick={() => {
                       table.setPageIndex(page - 1);
                     }}
@@ -101,7 +103,9 @@ export const TablePagination = <TData,>({
               {endPage < totalPages && (
                 <>
                   {endPage < totalPages - 1 && <PaginationEllipsis />}
-                  <PaginationItem>
+                  <PaginationItem
+                    className={`rounded-xl ${currentPage === endPage ? '' : 'cursor-pointer'}`}
+                  >
                     <PaginationLink
                       onClick={() => {
                         table.setPageIndex(totalPages - 1);
@@ -121,7 +125,7 @@ export const TablePagination = <TData,>({
                   className={
                     !table.getCanNextPage()
                       ? 'pointer-events-none opacity-50'
-                      : ''
+                      : 'cursor-pointer'
                   }
                 />
               </PaginationItem>

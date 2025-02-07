@@ -12,10 +12,10 @@ import {
 } from '@components/ui/dropdown-menu';
 import { type ColumnDef } from '@tanstack/react-table';
 import { MoreHorizontal } from 'lucide-react';
+import { type Transaction } from 'src/app/(dashboard)/admin/_components/fakeData';
 import { formatCurrency } from 'src/lib/fomartCurrency';
-import { type Payment } from './data';
 
-export const columns: Array<ColumnDef<Payment>> = [
+export const columns: Array<ColumnDef<Transaction>> = [
   {
     accessorKey: 'estado',
     header: 'Estado',
@@ -31,15 +31,15 @@ export const columns: Array<ColumnDef<Payment>> = [
     },
   },
   {
-    accessorKey: 'moneda',
+    accessorKey: 'currency',
     header: 'Moneda',
   },
   {
-    accessorKey: 'monto',
+    accessorKey: 'amount',
     header: 'Monto',
     cell: ({ row }) => {
-      const amount = parseFloat(row.getValue('monto'));
-      const formatted = formatCurrency(amount, row.getValue('moneda'));
+      const amount = parseFloat(row.getValue('amount'));
+      const formatted = formatCurrency(amount, row.getValue('currency'));
       return formatted;
     },
   },
@@ -48,7 +48,7 @@ export const columns: Array<ColumnDef<Payment>> = [
     header: 'Banco',
   },
   {
-    accessorKey: 'productoBancario',
+    accessorKey: 'bank_product_id',
     header: 'Producto Bancario',
   },
   {

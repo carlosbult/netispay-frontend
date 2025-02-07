@@ -1,59 +1,47 @@
-# Node.js
-node_modules/
-npm-debug.log
-yarn-debug.log
-yarn-error.log
+# Dependencias
+/node_modules
+/.pnp
+.pnp.js
 
-# Next.js
-.next/
-out/
+# Pruebas
+/coverage
+/.nyc_output
 
-# Build output
-dist/
-
-# Production
-.env.production
-.env.local
+# Entorno
 .env
-
-# IDEs
-.vscode/
-.idea/
-
-# OS generated files
-.DS_Store
-Thumbs.db
+.env.local
+.env.development
+.env.test
+.env.production
 
 # Logs
-logs/
-*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Runtime files
-pids/
-*.pid
-*.seed
-*.pid.lock
+# Build
+/.next
+/out
 
-# Coverage
-coverage/
+# Cache
+.cache
+/.eslintcache
 
-# ESLint & Prettier
-.eslintcache
-.prettierignore
+# Sistema
+.DS_Store
+*.pem
 
-# Jest
-jest-test-results.json
-test-coverage/
+# IDE
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 
-# Tye
-.tye/
-
-# Next.js export
-/_next/
-
-# TypeScript
-*.tsbuildinfo
-
-# Miscellaneous
-*.tgz
-
+# Misc
+.next
+.next/*
+!.next/cache
+!.next/cache/*

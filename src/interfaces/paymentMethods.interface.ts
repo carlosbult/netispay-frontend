@@ -5,6 +5,9 @@ export interface BankPaymentProduct {
   bank_id: number;
   name: string;
   is_active: boolean;
+  payment_category: null;
+  api_url: string;
+  api_key: string;
   configurations: Array<{
     id: number;
     bank_product_id: number;

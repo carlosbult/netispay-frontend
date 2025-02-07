@@ -14,7 +14,6 @@ export interface ProcessPaymentRequest {
 }
 
 export interface ProcessPaymentResponse {
-  
   message: string;
   status: string;
   transactionId?: string;

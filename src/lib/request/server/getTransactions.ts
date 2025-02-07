@@ -23,6 +23,7 @@ export const requestGetTransaction = async (params: {
   offset: number;
 }): Promise<TResponseRequestGetTransaction> => {
   const { limit, offset } = params;
+  console.log(offset);
   const baseUrl = process.env.BASE_API_URL;
   const url = new URL(`${baseUrl}/invoices/transactions`);
   console.log('baseUrl', url);

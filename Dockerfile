@@ -23,6 +23,14 @@ RUN yarn build
 # Instala solo dependencias de producción
 RUN yarn install --production --ignore-scripts --prefer-offline
 
+# Añadir argumentos de build
+ARG NEXT_PUBLIC_API_URL
+ARG BASE_API_URL
+
+# Configurar variables de entorno
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+ENV BASE_API_URL=${BASE_API_URL}
+
 # Fase 2: Imagen de producción
 FROM node:20-alpine AS runner
 

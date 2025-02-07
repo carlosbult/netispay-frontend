@@ -5,6 +5,14 @@ FROM node:20-alpine AS builder
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
+# Añadir argumentos de build
+ARG NEXT_PUBLIC_API_URL
+ARG BASE_API_URL
+
+# Configurar variables de entorno REQUERIDAS (no optional)
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+ENV BASE_API_URL=${BASE_API_URL}
+
 # Establece el directorio de trabajo
 WORKDIR /app
 
@@ -25,14 +33,6 @@ RUN yarn build
 
 # Instala solo dependencias de producción
 RUN yarn install --production --ignore-scripts --prefer-offline
-
-# Añadir argumentos de build
-ARG NEXT_PUBLIC_API_URL
-ARG BASE_API_URL
-
-# Configurar variables de entorno REQUERIDAS (no optional)
-ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
-ENV BASE_API_URL=${BASE_API_URL}
 
 # Forzar modo dinámico en build
 ENV NEXT_STATIC_EXPORT=false

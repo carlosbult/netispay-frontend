@@ -82,5 +82,5 @@ jobs:
                 "image_alias": "'"${{ secrets.IMAGE_ALIAS }}"'",
                 "tag": "'"$VERSION"'",
                 "aws_access_key": "'"${{secrets.AWS_QA_ACCESS_KEY}}"'",
-                "aws_secret_key": "'"${{secrets.AWS_QA_SECRET_KEY}}"'",
+                "aws_secret_key": "'"${{secrets.AWS_QA_SECRET_KEY}}"'"
             }'

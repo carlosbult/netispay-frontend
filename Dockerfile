@@ -5,6 +5,14 @@ FROM node:20-alpine AS builder
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
+# Añadir argumentos de build
+ARG NEXT_PUBLIC_API_URL
+ARG BASE_API_URL
+
+# Configurar variables de entorno REQUERIDAS (no optional)
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+ENV BASE_API_URL=${BASE_API_URL}
+
 # Establece el directorio de trabajo
 WORKDIR /app
 
@@ -14,6 +22,9 @@ COPY package.json yarn.lock ./
 # Instala las dependencias con cache optimizado
 RUN yarn install --frozen-lockfile
 
+# Instala dependencias de TypeScript antes del build
+RUN yarn add -D typescript @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser
+
 # Copia el resto del código fuente
 COPY . .
 
@@ -22,6 +33,9 @@ RUN yarn build
 
 # Instala solo dependencias de producción
 RUN yarn install --production --ignore-scripts --prefer-offline
+
+# Forzar modo dinámico en build
+ENV NEXT_STATIC_EXPORT=false
 
 # Fase 2: Imagen de producción
 FROM node:20-alpine AS runner

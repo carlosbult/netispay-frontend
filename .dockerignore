@@ -42,6 +42,6 @@ Dockerfile*
 .pnp.*
 
 # Additional files and directories
-.env
-.env.*
+# .env
+# .env.*
 coverage

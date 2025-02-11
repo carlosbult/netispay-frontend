@@ -1,8 +1,8 @@
 'use client';
+import { Button } from '@/components/ui/button';
 import { ErrorCard } from '@components/ErrorCard';
 import { LoadingState } from '@components/Loader';
 import { MoreVertical } from 'lucide-react';
-import { Button } from 'src/shared/components/ui/button';
 import { Card } from 'src/shared/components/ui/card';
 import { useInvoices } from '../hooks/useInvoices';
 

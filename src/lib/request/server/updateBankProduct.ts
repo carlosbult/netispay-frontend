@@ -1,6 +1,5 @@
 import { type ApiErrorResponse } from '@interfaces/errors.interface';
 import { type BankPaymentProduct } from '@interfaces/paymentMethods.interface';
-import { getApiUrl } from '../../getApiUrl';
 
 type IUpdateBankProductResponse = BankPaymentProduct | ApiErrorResponse;
 
@@ -9,7 +8,8 @@ const updateBankProduct = async (
   id: string,
 ): Promise<IUpdateBankProductResponse> => {
   try {
-    const response = await fetch(getApiUrl(`/bank-products/${id}`), {
+    const url = process.env.NEXT_PUBLIC_API_BASE_URL;
+    const response = await fetch(`${url}/bank-products/${id}`, {
       method: 'PATCH',
       body: JSON.stringify(data),
       headers: { 'Content-Type': 'application/json' },

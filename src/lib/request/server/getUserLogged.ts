@@ -13,7 +13,7 @@ interface IErrorResponse {
 }
 
 export const requestUserLogged = async (cookieToken: RequestCookie) => {
-  const baseUrl = process.env.BASE_API_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   console.log(`token = ${cookieToken.name}=${cookieToken.value}`);
 
   const response = await fetch(`${baseUrl}/session-sign-in/login-test`, {

@@ -1,8 +1,8 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import { CheckCircle2, CircleAlert, XCircle } from 'lucide-react';
 import { formatCurrency } from 'src/lib/fomartCurrency';
-import { Button } from 'src/shared/components/ui/button';
 import {
   Dialog,
   DialogContent,

@@ -1,4 +1,5 @@
-import { Button } from '@components/ui/button';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -8,7 +9,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu';
-import { Input } from '@components/ui/input';
 import { Label } from '@components/ui/label';
 import { type BankPaymentProduct } from '@interfaces/paymentMethods.interface';
 import { useEffect, useMemo, useState } from 'react';

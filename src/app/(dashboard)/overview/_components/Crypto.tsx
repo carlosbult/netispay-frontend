@@ -1,5 +1,5 @@
-import { Button } from '@components/ui/button';
-import { Input } from '@components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { type BankPaymentProduct } from '@interfaces/paymentMethods.interface';
 import { useState } from 'react';
 import VerificationApiForm from './VerificationApiForm';

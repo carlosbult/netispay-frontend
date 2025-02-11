@@ -1,10 +1,18 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { cn } from 'src/lib/utils';
 import Icons from './Icons';
 import MaxWidthWrapper from './MaxWidthWrapper';
 import NavbarMenu from './NavbarMenu';
 
 const NavBar = () => {
+  // const router = useRouter()
+  const pathname = usePathname();
+  if (pathname.includes('/admin')) {
+    return null;
+  }
   return (
     <div
       className={cn(

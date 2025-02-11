@@ -2,12 +2,12 @@ import {
   type ILoginResponseSuccessfully,
   type LoginCredentials,
 } from '@interfaces/auth.interface';
-import { userService } from 'src/modules/users/api/users.service';
-import { getApiUrl } from '../../getApiUrl';
+import getUserById from './getUserById';
 
 const signInFetch = async (data: LoginCredentials) => {
+  const url = process.env.NEXT_PUBLIC_API_BASE_URL;
   try {
-    const response = await fetch(getApiUrl('session-sign-in'), {
+    const response = await fetch(`${url}/session-sign-in`, {
       method: 'POST',
       body: JSON.stringify(data),
       headers: { 'Content-Type': 'application/json' },
@@ -21,9 +21,7 @@ const signInFetch = async (data: LoginCredentials) => {
     let userId;
     const responseData: ILoginResponseSuccessfully = await response.json();
     if (responseData.data.session.userId != null) {
-      const user = await userService.getUserById(
-        responseData.data.session.userId,
-      );
+      const user = await getUserById(responseData.data.session.userId);
       if (user != null) {
         responseData.data.session.userRole = user.role;
         // localStorage.setItem('userRole', user.role);

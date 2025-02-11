@@ -40,7 +40,7 @@ type IResponseSuccessfully = ApiErrorResponse | (IISPConfig[] | IISPConfig);
 //*
 //* Constants
 //*
-const baseUrl = process.env.BASE_API_URL;
+const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 //*
 //* Get invoices from the API
 //*

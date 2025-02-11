@@ -1,9 +1,7 @@
 import {
-  type ILoginResponseSuccessfully,
   type LoginCredentials,
   type LoginResponse,
 } from '@interfaces/auth.interface';
-import signInFetch from '@lib/request/client/sign-in';
 import { useMutation, type UseMutationResult } from '@tanstack/react-query';
 import { type CustomApiError } from 'src/interfaces/errors.interface';
 import { useToast } from 'src/shared/components/ui/use-toast';
@@ -85,36 +83,6 @@ export function useGenerateOTPLogin(): UseMutationResult<
       await authService.generateLoginOTP(credentials),
 
     onSuccess: (data: LoginResponse) => {
-      toast({
-        title: 'Data recibida',
-        description: data.message,
-      });
-    },
-
-    onError: (error: CustomApiError) => {
-      toast({
-        title: `Error al verificar los datos enviados`,
-        description: error.message,
-        variant: 'destructive',
-      });
-    },
-  });
-}
-
-/** Session Login User */
-export function useSessionLogin(): UseMutationResult<
-  ILoginResponseSuccessfully,
-  CustomApiError,
-  LoginCredentials
-> {
-  const { toast } = useToast();
-
-  return useMutation({
-    mutationFn: async (credentials: LoginCredentials) =>
-      await signInFetch(credentials),
-
-    onSuccess: (data: ILoginResponseSuccessfully) => {
-      console.log(data);
       toast({
         title: 'Data recibida',
         description: data.message,

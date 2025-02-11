@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 'use client';
 
-import { Button } from '@components/ui/button';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Form,
   FormControl,
@@ -11,7 +12,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@components/ui/form';
-import { Input } from '@components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   ClientProfileSchema,

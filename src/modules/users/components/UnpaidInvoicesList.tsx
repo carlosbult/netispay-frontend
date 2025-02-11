@@ -1,10 +1,10 @@
 'use client';
+import { Button } from '@/components/ui/button';
 import { ErrorCard } from '@components/ErrorCard';
 import { LoadingState } from '@components/Loader';
 import { type Invoice } from 'src/interfaces/invoice.interface';
 import { formatCurrency } from 'src/lib/fomartCurrency';
 import { useInvoices } from 'src/modules/users/hooks/useInvoices';
-import { Button } from 'src/shared/components/ui/button';
 import {
   Card,
   CardContent,

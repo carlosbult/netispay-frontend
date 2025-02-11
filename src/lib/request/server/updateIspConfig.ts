@@ -1,6 +1,5 @@
 import { type ApiErrorResponse } from '@interfaces/errors.interface';
 import { type IISPConfig } from 'src/app/(dashboard)/admin/settings/actions';
-import { getApiUrl } from '../../getApiUrl';
 
 type IUpdateIspConfigResponse = IISPConfig | ApiErrorResponse;
 
@@ -9,7 +8,8 @@ const updateIspConfig = async (
   id: string,
 ): Promise<IUpdateIspConfigResponse> => {
   try {
-    const response = await fetch(getApiUrl(`/settings/network-manager/${id}`), {
+    const url = process.env.NEXT_PUBLIC_API_BASE_URL;
+    const response = await fetch(`${url}/settings/network-manager/${id}`, {
       method: 'PATCH',
       body: JSON.stringify(data),
       headers: { 'Content-Type': 'application/json' },

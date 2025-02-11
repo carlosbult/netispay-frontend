@@ -1,7 +1,7 @@
 'use client';
-import { useEffect } from 'react';
-import { Button } from '@components/ui/button';
+import { Button } from '@/components/ui/button';
 import { Alert, AlertTitle } from '@components/ui/alert';
+import { useEffect } from 'react';
 
 const Error = ({
   error,

@@ -1,12 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-has-content */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
+import { type ButtonProps, buttonVariants } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react';
 import * as React from 'react';
 import { cn } from 'src/lib/utils';
-import {
-  type ButtonProps,
-  buttonVariants,
-} from 'src/shared/components/ui/button';
 
 const Pagination = ({ className, ...props }: React.ComponentProps<'nav'>) => (
   <nav

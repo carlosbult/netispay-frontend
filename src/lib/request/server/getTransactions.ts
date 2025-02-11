@@ -24,7 +24,7 @@ export const requestGetTransaction = async (params: {
 }): Promise<TResponseRequestGetTransaction> => {
   const { limit, offset } = params;
   console.log(offset);
-  const baseUrl = process.env.BASE_API_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   const url = new URL(`${baseUrl}/invoices/transactions`);
   console.log('baseUrl', url);
   url.searchParams.append('limit', limit.toString());

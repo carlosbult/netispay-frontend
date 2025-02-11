@@ -1,10 +1,10 @@
 import { type ILoginResponseSuccessfully } from '@interfaces/auth.interface';
 import { type IPayInvoiceAdapter } from '@lib/adapters/payInvoice-validator';
-import { getApiUrl } from '../../getApiUrl';
 
 const payInvoiceInFetch = async (data: IPayInvoiceAdapter) => {
   try {
-    const response = await fetch(getApiUrl('invoices/payInvoice'), {
+    const url = process.env.NEXT_PUBLIC_API_BASE_URL;
+    const response = await fetch(`${url}/invoices/payInvoice`, {
       method: 'POST',
       body: JSON.stringify(data),
       headers: { 'Content-Type': 'application/json' },

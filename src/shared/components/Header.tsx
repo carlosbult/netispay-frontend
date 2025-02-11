@@ -13,8 +13,8 @@ import { useRouter } from 'next/navigation';
 import { handleClientLogout } from 'src/app/authClient';
 import { removeAuthCookie } from 'src/app/authServer';
 import { useAuthStore } from 'src/shared/store/useAuthStore';
+import { Button } from '../../components/ui/button';
 import { type RoleNavigation } from '../../interfaces/header.interface';
-import { Button } from './ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,

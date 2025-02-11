@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@components/ui/button';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@components/ui/card';
 import { Copy, Download, X } from 'lucide-react';
 import { formatCurrency } from 'src/lib/fomartCurrency';

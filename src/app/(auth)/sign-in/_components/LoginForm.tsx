@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 'use client';
 
-import { Button } from '@components/ui/button';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Form,
   FormControl,
@@ -9,7 +10,6 @@ import {
   FormItem,
   FormMessage,
 } from '@components/ui/form';
-import { Input } from '@components/ui/input';
 import { Label } from '@components/ui/label';
 import { Separator } from '@components/ui/separator';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -22,7 +22,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Icons from 'src/components/Icons';
-import { useSessionLogin } from 'src/modules/auth/hooks/useAuth';
+import { useSessionLogin } from 'src/hooks/use-session-login';
 
 const LoginForm = () => {
   const [isPasswordVisible, setPasswordVisible] = useState(false);

@@ -1,20 +1,20 @@
 'use client';
-import Image from 'next/image';
-import { Card, CardContent } from 'src/shared/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { ErrorCard } from '@components/ErrorCard';
-import { Input } from 'src/shared/components/ui/input';
-import { Button } from 'src/shared/components/ui/button';
-import { useBankProducts } from '../hooks/useBankProduct';
-import { type PaymentProduct } from '../types/paymentProducts.interface';
 import { LoadingState } from '@components/Loader';
+import { Alert, AlertDescription } from '@components/ui/alert';
 import { Badge } from '@components/ui/badge';
+import Image from 'next/image';
+import { PaymentCalculation } from 'src/modules/users/components/PaymentCalculation';
+import { Card, CardContent } from 'src/shared/components/ui/card';
+import { useInvoiceSelection } from 'src/shared/store/useInvoiceSelection';
 import {
   getPaymentMethodName,
   type PaymentMethodType,
 } from '../constants/paymentMethosNames';
-import { PaymentCalculation } from 'src/modules/users/components/PaymentCalculation';
-import { useInvoiceSelection } from 'src/shared/store/useInvoiceSelection';
-import { Alert, AlertDescription } from '@components/ui/alert';
+import { useBankProducts } from '../hooks/useBankProduct';
+import { type PaymentProduct } from '../types/paymentProducts.interface';
 import { BinanceVerificationForm } from './BinanceVerificationForm';
 
 interface PaymentMethod {

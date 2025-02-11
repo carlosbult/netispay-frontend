@@ -21,7 +21,7 @@ type IResponseSuccessfully =
   | IBankPaymentMethodResponseSuccessfully;
 
 //* Constants
-const baseUrl = process.env.BASE_API_URL;
+const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 //* Get invoices from the API
 export const handlerGetInvoices = async (userId: string, status?: string) => {

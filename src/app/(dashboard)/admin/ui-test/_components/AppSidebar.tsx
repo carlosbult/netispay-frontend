@@ -1,6 +1,6 @@
 'use client';
 
-import { BookOpen, Bot, Home, Settings2, SquareTerminal } from 'lucide-react';
+import { BookOpen, Bot, Home, Settings2 } from 'lucide-react';
 import * as React from 'react';
 
 import {
@@ -39,21 +39,28 @@ const data = {
   // ],
   navMain: [
     {
-      title: 'Dashboard',
+      title: 'Inicio',
       url: '/admin',
       icon: Home,
       items: [],
     },
     {
-      title: 'ISP Settings',
-      url: '/admin/settings',
-      icon: SquareTerminal,
-      isActive: true,
+      title: 'Settings',
+      url: '#',
+      icon: Settings2,
       items: [
-        // {
-        //   title: 'List',
-        //   url: '/admin/settings',
-        // },
+        {
+          title: 'ISP',
+          url: '/admin/settings?section=isp-config',
+        },
+        {
+          title: 'Bancos',
+          url: '/admin/settings?section=bank-config',
+        },
+        {
+          title: 'Comisiones',
+          url: '/admin/settings?section=commissions-config',
+        },
       ],
     },
     {
@@ -98,29 +105,29 @@ const data = {
         },
       ],
     },
-    {
-      title: 'Settings',
-      url: '#',
-      icon: Settings2,
-      items: [
-        {
-          title: 'General',
-          url: '#',
-        },
-        {
-          title: 'Team',
-          url: '#',
-        },
-        {
-          title: 'Billing',
-          url: '#',
-        },
-        {
-          title: 'Limits',
-          url: '#',
-        },
-      ],
-    },
+    // {
+    //   title: 'Settings',
+    //   url: '#',
+    //   icon: Settings2,
+    //   items: [
+    //     {
+    //       title: 'General',
+    //       url: '#',
+    //     },
+    //     {
+    //       title: 'Team',
+    //       url: '#',
+    //     },
+    //     {
+    //       title: 'Billing',
+    //       url: '#',
+    //     },
+    //     {
+    //       title: 'Limits',
+    //       url: '#',
+    //     },
+    //   ],
+    // },
   ],
   // projects: [
   //   {

@@ -75,7 +75,7 @@ const ISPConfigForm = ({
   }
 
   return (
-    <Card className="w-full max-w-2xl">
+    <Card className="w-full max-w-2xl mx-auto">
       <CardHeader>
         <CardTitle>Edit ISP Data</CardTitle>
       </CardHeader>

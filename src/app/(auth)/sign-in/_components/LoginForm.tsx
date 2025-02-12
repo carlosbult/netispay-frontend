@@ -8,9 +8,9 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from '@components/ui/form';
-import { Label } from '@components/ui/label';
 import { Separator } from '@components/ui/separator';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -18,6 +18,7 @@ import {
   type TLoginSchemaValidator,
 } from '@lib/validators/login-validator';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -77,9 +78,9 @@ const LoginForm = () => {
             name="email"
             render={({ field }) => (
               <FormItem className="space-y-0">
-                <Label htmlFor="email" className="font-normal ">
+                <FormLabel htmlFor="email" className="font-normal ">
                   Email
-                </Label>
+                </FormLabel>
                 <FormControl>
                   <Input
                     id="email"
@@ -101,12 +102,12 @@ const LoginForm = () => {
             name="password"
             render={({ field }) => (
               <FormItem className="space-y-0">
-                <div className="flex items-center">
-                  <Label
+                <div className="flex items-center pb-1">
+                  <FormLabel
                     htmlFor="password"
                     className="font-normal flex w-full justify-between"
                   >
-                    Your password
+                    Tu Contraseña
                     <button
                       className="flex items-center justify-center"
                       onClick={() => {
@@ -118,9 +119,9 @@ const LoginForm = () => {
                       ) : (
                         <EyeOffIcon className="w-4 h-4 mr-1" />
                       )}
-                      Hidden
+                      Ocultar
                     </button>
-                  </Label>
+                  </FormLabel>
                 </div>
                 <FormControl>
                   <Input
@@ -137,25 +138,25 @@ const LoginForm = () => {
             )}
           />
         </div>
-        <a
+        <Link
           href="/forgot-password"
           className="ml-auto inline-block text-sm underline "
         >
-          Forgot your password?
-        </a>
+          Olvidaste tu contraseña?
+        </Link>
         <Button type="submit" className="w-full">
-          Login
+          Iniciar
         </Button>
         <div className="flex items-center justify-center w-full">
           <Separator className=" w-[40%] opacity-35" />
-          <span className="px-4">Or</span>
+          <span className="px-4">O</span>
           <Separator className=" w-[40%] opacity-35" />
         </div>
         <Button variant="outline" className="w-full">
           <span className="mr-2">
             <Icons.GoogleIconColor className="h-4 w-4" />
           </span>
-          Login with Google
+          Iniciar con Google
         </Button>
       </form>
     </Form>

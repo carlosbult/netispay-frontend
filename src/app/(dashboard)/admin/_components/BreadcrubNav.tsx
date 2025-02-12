@@ -80,21 +80,33 @@ export const BreadcrumbNav = () => {
 
     parts.forEach((element) => {
       if (element === 'admin') {
-        bread.push({ href: '/admin', label: 'Dashboard' });
+        bread.push({ href: '/admin', label: 'Inicio' });
       }
-      if (element === 'settings') {
-        bread.push({ href: '/admin/settings', label: 'Settings' });
-      }
-      if (element === 'section=isp-config') {
+      // if (element === 'settings') {
+      //   bread.push({ href: '/admin/settings', label: 'Settings' });
+      // }
+      if (element.includes('section=isp-config')) {
         bread.push({
           href: '/admin/settings?section=isp-config',
-          label: 'ISP Configs',
+          label: 'Configuración de ISP',
+        });
+      }
+      if (element.includes('section=bank-config')) {
+        bread.push({
+          href: '/admin/settings?section=bank-config',
+          label: 'Configuración de bancos',
+        });
+      }
+      if (element.includes('section=commissions-config')) {
+        bread.push({
+          href: '/admin/settings?section=commissions-config',
+          label: 'Configuración de comisiones',
         });
       }
       if (element.split('=')[0] === 'ispId') {
         bread.push({
           href: `/admin/settings?section=isp-config&${element}&update=false`,
-          label: 'ISP Details',
+          label: 'Detalles de ISP',
         });
       }
     });

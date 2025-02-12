@@ -25,6 +25,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu';
+import handlerLogOut from '@lib/sessionLogOut';
+import { useRouter } from 'next/navigation';
 
 export const NavUser = ({
   user,
@@ -36,6 +38,7 @@ export const NavUser = ({
   };
 }) => {
   const { isMobile } = useSidebar();
+  const router = useRouter();
 
   return (
     <SidebarMenu>
@@ -98,7 +101,11 @@ export const NavUser = ({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                handlerLogOut(router);
+              }}
+            >
               <LogOut />
               Log out
             </DropdownMenuItem>

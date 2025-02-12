@@ -27,7 +27,7 @@ const RootLayout = ({
     <html lang="es" className="h-full overflow-hidden">
       <body
         className={cn(
-          'relative h-full font-sans antialiased overflow-hidden bg-gray-lighter',
+          'relative h-full font-sans antialiased overflow-hidden',
           inter.className,
         )}
       >

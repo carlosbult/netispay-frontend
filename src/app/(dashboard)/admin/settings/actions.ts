@@ -8,7 +8,7 @@ import updateIspConfig from '@lib/request/server/updateIspConfig';
 
 export interface IBankPaymentMethodResponseSuccessfully {
   products: {
-    null: BankPaymentProduct[];
+    BANK_TRANSFER: BankPaymentProduct[];
   };
 }
 

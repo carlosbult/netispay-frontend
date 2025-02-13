@@ -99,7 +99,7 @@ class ApiService {
 
   async post<T>(
     endpoint: string,
-    data: Record<string, unknown>,
+    data: object | Record<string, unknown>,
     headers: HeadersInit = {},
   ): Promise<T> {
     return await this.request<T>(endpoint, {

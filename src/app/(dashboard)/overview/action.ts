@@ -13,7 +13,7 @@ export interface IInvoiceResponseSuccessfully {
 }
 export interface IBankPaymentMethodResponseSuccessfully {
   products: {
-    null: BankPaymentProduct[];
+    BANK_TRANSFER: BankPaymentProduct[];
   };
 }
 type IResponseSuccessfully =
@@ -95,7 +95,7 @@ export const handlerGetUserSession = async () => {
       // Check if the error is specifically due to an unauthorized session (401)
       if (error.message.includes('Unauthorized')) {
         console.log('Deleting token');
-        cookies().delete('session_token');
+        (await cookies()).delete('session_token');
         console.warn('Session is invalid or expired. Redirecting to login...');
         // You can add custom logic here, e.g., redirect to the login page
       }

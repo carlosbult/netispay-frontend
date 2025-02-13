@@ -11,7 +11,7 @@ const signInFetch = async (data: LoginCredentials) => {
       method: 'POST',
       body: JSON.stringify(data),
       headers: { 'Content-Type': 'application/json' },
-      credentials: 'include', // Garantiza el manejo de cookies
+      // credentials: 'include', // Garantiza el manejo de cookies
     });
 
     if (!response.ok) {

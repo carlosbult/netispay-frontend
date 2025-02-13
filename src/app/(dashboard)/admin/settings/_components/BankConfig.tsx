@@ -47,7 +47,7 @@ const BankConfig = async () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {bankProducts.products.null.map((bank, index) => (
+                {bankProducts.products.BANK_TRANSFER.map((bank, index) => (
                   <TableRow key={index}>
                     <TableCell>
                       <Checkbox />

@@ -1,101 +1,77 @@
 'use server';
 
-import { type ApiErrorResponse } from '@interfaces/errors.interface';
+import {
+  type ILoginResponseSuccessfully,
+  type LoginCredentials,
+} from '@interfaces/auth.interface';
+import { loginUser } from '@lib/request/auth_request';
+import getUserById from '@lib/request/client/getUserById';
 import { cookies } from 'next/headers';
 
-interface ILoginFormData {
-  email: string;
-  password: string;
-}
-
-interface ILoginResponseSuccessfully {
-  message: string;
-  data: {
-    session: {
-      id: string;
-      userId: number;
-      expiresAt: string;
-    };
-  };
+interface ICookiesData {
+  userId: number | undefined;
+  userRole: string | undefined;
+  token_expires: string;
 }
 
 type LoginActionResponse =
-  | { success: true; data: ILoginResponseSuccessfully }
+  | {
+      success: true;
+      data: ILoginResponseSuccessfully;
+      cookiesData: ICookiesData;
+    }
   | { success: false; error: string };
 
-export async function loginAction(
-  data: ILoginFormData,
+export async function handlerLoginAction(
+  data: LoginCredentials,
 ): Promise<LoginActionResponse> {
-  console.log('loginAction', data);
-  try {
-    const response = await fetch(
-      'http://localhost:3000/api/v1/session-sign-in',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    );
-    console.log('server response', response);
-
-    if (!response.ok) {
-      const errorData = (await response.json()) as ApiErrorResponse;
-      const errorMessage =
-        typeof errorData.message === 'string' && errorData.message.length > 0
-          ? errorData.message
-          : 'Login failed';
+  const response = await loginUser(data);
+  if (response != null) {
+    if ('errorCode' in response) {
       return {
         success: false,
-        error: errorMessage,
+        error: response.message,
       };
     }
-
-    const responseData = (await response.json()) as ILoginResponseSuccessfully;
-
-    // Handle cookies from response
-    const setCookie = response.headers.get('set-cookie');
-    if (setCookie != null) {
-      setCookie.split(',').forEach((cookie) => {
-        const [cookieName, ...cookieValue] = cookie.split('=');
-        cookies().set(cookieName.trim(), cookieValue.join('='), {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
-          sameSite: 'lax',
-        });
-      });
+    let userRole;
+    let userId;
+    const user = await getUserById(response.data.session.userId);
+    if (user != null) {
+      response.data.session.userRole = user.role;
+      userId = user.id;
+      userRole = user.role;
     }
 
-    // Store session ID in a cookie if needed
-    cookies().set('sessionId', responseData.data.session.id, {
+    const expiresAt = response.data.session.expiresAt;
+    const cookieData = {
+      userId,
+      userRole,
+      token_expires: new Date(expiresAt).toUTCString(),
+    };
+    const cookieStore = await cookies();
+    cookieStore.set({
+      name: 'session_token',
+      value: response.data.token,
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      expires: new Date(responseData.data.session.expiresAt),
+      expires: new Date(expiresAt),
+      path: '/',
     });
-
-    // handle set cookie to expire time
-    const expiresAt = new Date(responseData.data.session.expiresAt);
-    const now = new Date();
-    const timeUntilExpiration = expiresAt.getTime() - now.getTime();
-    console.log('timeUntilExpiration', timeUntilExpiration);
-
-    cookies().set('expiresAt', responseData.data.session.expiresAt, {
+    cookieStore.set({
+      name: 'auth_data',
+      value: JSON.stringify(cookieData),
+      expires: new Date(expiresAt),
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      expires: new Date(responseData.data.session.expiresAt),
+      path: '/',
     });
-
     return {
       success: true,
-      data: responseData,
+      data: response,
+      cookiesData: cookieData,
     };
-  } catch (error) {
-    console.error('Error during login:', error);
+  } else {
     return {
       success: false,
-      error: 'An error occurred during login',
+      error: 'unexpected error',
     };
   }
 }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 'use client';
 
 import {
@@ -25,7 +26,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu';
-import handlerLogOut from '@lib/sessionLogOut';
+import { closeSessionOnServer } from '@lib/auth';
 import { useRouter } from 'next/navigation';
 
 export const NavUser = ({
@@ -39,6 +40,11 @@ export const NavUser = ({
 }) => {
   const { isMobile } = useSidebar();
   const router = useRouter();
+
+  const closeSession = async () => {
+    await closeSessionOnServer();
+    router.push('/login');
+  };
 
   return (
     <SidebarMenu>
@@ -101,11 +107,7 @@ export const NavUser = ({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => {
-                handlerLogOut(router);
-              }}
-            >
+            <DropdownMenuItem onClick={closeSession}>
               <LogOut />
               Log out
             </DropdownMenuItem>

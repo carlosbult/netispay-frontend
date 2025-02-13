@@ -23,12 +23,12 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Icons from 'src/components/Icons';
-import { useSessionLogin } from 'src/hooks/use-session-login';
+import { handlerLoginAction } from '../actions';
 
 const LoginForm = () => {
   const [isPasswordVisible, setPasswordVisible] = useState(false);
   const router = useRouter();
-  const signIn = useSessionLogin();
+  // const signIn = useSessionLogin();
   const form = useForm<TLoginSchemaValidator>({
     resolver: zodResolver(loginSchemaValidator),
     defaultValues: {
@@ -37,36 +37,31 @@ const LoginForm = () => {
     },
   });
 
-  if (signIn.isSuccess) {
-    const isValid = signIn.data.data;
-    if (isValid != null) {
-      if (signIn.data.data.session.userRole === 'ADMIN') {
+  // if (signIn.isSuccess) {
+  //   const isValid = signIn.data.data;
+  //   if (isValid != null) {
+  //     if (signIn.data.data.session.userRole === 'ADMIN') {
+  //       router.push('/admin');
+  //     } else {
+  //       router.push('/overview');
+  //     }
+  //   }
+  // }
+
+  const onSubmit = async (formData: TLoginSchemaValidator) => {
+    // try {
+    //   signIn.mutate(formData);
+    // } catch (error) {
+    //   console.log(error);
+    // }
+    const response = await handlerLoginAction(formData);
+    if (response.success) {
+      if (response.data.data.session.userRole === 'ADMIN') {
         router.push('/admin');
       } else {
         router.push('/overview');
       }
     }
-  }
-
-  const onSubmit = async (formData: TLoginSchemaValidator) => {
-    try {
-      signIn.mutate(formData);
-    } catch (error) {
-      console.log(error);
-    }
-    // const result = await loginAction(formData);
-
-    // if (result.success) {
-    //   // Type narrowing - TypeScript knows result.data is ILoginResponseSuccessfully
-    //   console.log(
-    //     `Login successful! Session expires at ${result.data.data.session.expiresAt}`,
-    //   );
-    //   // Handle successful login
-    // } else {
-    //   // Type narrowing - TypeScript knows result.error is string
-    //   console.error(`Login failed: ${result.error}`);
-    //   // Handle error
-    // }
   };
 
   return (

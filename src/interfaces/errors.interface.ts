@@ -20,3 +20,13 @@ export class CustomApiError extends Error {
     this.name = 'CustomApiError';
   }
 }
+
+export interface ApiResponse<T = unknown> {
+  data: T;
+  pagination?: {
+    total: number;
+    limit: number;
+    offset: number;
+    hasMore: boolean;
+  };
+}

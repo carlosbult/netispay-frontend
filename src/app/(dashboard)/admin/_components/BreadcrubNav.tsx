@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import {
   Breadcrumb,
   BreadcrumbEllipsis,
@@ -9,7 +10,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@components/ui/breadcrumb';
-import { Button } from '@components/ui/button';
 import {
   Drawer,
   DrawerClose,
@@ -28,7 +28,7 @@ import {
 } from '@components/ui/dropdown-menu';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useMediaQuery } from 'src/hooks/use-media-query';
 
@@ -44,14 +44,14 @@ interface IBreadcrumbItem {
   label: string;
 }
 
-const ITEMS_TO_DISPLAY = 4;
+const ITEMS_TO_DISPLAY = 3;
 
 export const BreadcrumbNav = () => {
   const [open, setOpen] = useState(false);
-  const [items, setItems] = useState<IBreadcrumbItem[]>([
-    { href: '/admin', label: 'Dashboard' },
-  ]);
+  const [items, setItems] = useState<IBreadcrumbItem[]>([]);
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const isDesktop = useMediaQuery('(min-width: 768px)');
   const back = () => {
@@ -60,29 +60,16 @@ export const BreadcrumbNav = () => {
 
   const getCurrentUrl = () => {
     if (typeof window !== 'undefined') {
-      const urlString = window.location.href;
-      const urlObj = new URL(urlString);
-
-      // Get protocol, host, and port
-      // const protocol = urlObj.protocol; // "http:"
-      // const host = urlObj.host; // "localhost:3001"
-
-      // Split the pathname into segments, filtering out any empty strings
+      const urlObj = new URL(window.location.href);
       const pathSegments = urlObj.pathname
         .split('/')
         .filter((segment) => segment !== '');
-
-      // Extract search parameters and map them to "key=value" strings
       const queryParams = Array.from(urlObj.searchParams.entries()).map(
         ([key, value]) => `${key}=${value}`,
       );
-
-      // Combine all parts into a single array
-      const parts = [...pathSegments, ...queryParams];
-
-      return parts;
+      return [...pathSegments, ...queryParams];
     }
-    return '';
+    return [];
   };
 
   console.log(getCurrentUrl());
@@ -90,31 +77,44 @@ export const BreadcrumbNav = () => {
   useEffect(() => {
     const parts = getCurrentUrl();
     const bread: IBreadcrumbItem[] = [];
-    if (parts !== '') {
-      parts.forEach((element) => {
-        if (element === 'admin') {
-          bread.push({
-            href: '/admin',
-            label: 'Dashboard',
-          });
-        }
-        if (element === 'section=isp-config') {
-          console.log('count');
-          bread.push({
-            href: '/admin/settings?section=isp-config',
-            label: 'ISP Configs',
-          });
-        }
-        if (element.split('=')[0] === 'ispId') {
-          bread.push({
-            href: `/admin/settings?section=isp-config&&${element}&&update=false`,
-            label: 'ISP Details',
-          });
-        }
-      });
-    }
+
+    parts.forEach((element) => {
+      if (element === 'admin') {
+        bread.push({ href: '/admin', label: 'Inicio' });
+      }
+      // if (element === 'settings') {
+      //   bread.push({ href: '/admin/settings', label: 'Settings' });
+      // }
+      if (element.includes('section=isp-config')) {
+        bread.push({
+          href: '/admin/settings?section=isp-config',
+          label: 'Configuración de ISP',
+        });
+      }
+      if (element.includes('section=bank-config')) {
+        bread.push({
+          href: '/admin/settings?section=bank-config',
+          label: 'Configuración de bancos',
+        });
+      }
+      if (element.includes('section=commissions-config')) {
+        bread.push({
+          href: '/admin/settings?section=commissions-config',
+          label: 'Configuración de comisiones',
+        });
+      }
+      if (element.split('=')[0] === 'ispId') {
+        bread.push({
+          href: `/admin/settings?section=isp-config&${element}&update=false`,
+          label: 'Detalles de ISP',
+        });
+      }
+    });
+
     setItems(bread);
-  }, []);
+  }, [pathname, searchParams]);
+
+  console.log(items);
 
   return (
     <nav className="pt-16 pl-10 flex gap-2 items-center">

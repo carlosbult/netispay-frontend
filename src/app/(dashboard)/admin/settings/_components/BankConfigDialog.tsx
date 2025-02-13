@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 'use client';
 
-import { Button } from '@components/ui/button';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Dialog,
   DialogContent,
@@ -17,7 +18,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@components/ui/form';
-import { Input } from '@components/ui/input';
 import { ScrollArea } from '@components/ui/scroll-area';
 import { Switch } from '@components/ui/switch';
 import { Textarea } from '@components/ui/textarea';

@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 'use client';
 
-import { Button } from '@components/ui/button';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@components/ui/card';
 import {
   Form,
@@ -12,7 +13,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@components/ui/form';
-import { Input } from '@components/ui/input';
 import { Switch } from '@components/ui/switch';
 import { useToast } from '@components/ui/use-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -75,7 +75,7 @@ const ISPConfigForm = ({
   }
 
   return (
-    <Card className="w-full max-w-2xl">
+    <Card className="w-full max-w-2xl mx-auto">
       <CardHeader>
         <CardTitle>Edit ISP Data</CardTitle>
       </CardHeader>

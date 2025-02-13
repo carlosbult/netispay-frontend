@@ -22,7 +22,8 @@
       "@components/*": ["src/shared/components/*"],
       "@services/*": ["./src/services/*"],
       "@interfaces/*": ["src/interfaces/*"],
-      "@lib/*": ["src/lib/*"]
+      "@lib/*": ["src/lib/*"],
+      "@/*": ["./src/*"]
     },
     "plugins": [
       {

@@ -1,4 +1,4 @@
-import { buttonVariants } from '@components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -35,7 +35,7 @@ const ClientPage = async ({
   const bankPaymentProducts = await handlerGetPaymentMethods();
   const bankPaymentMethods =
     typeof bankPaymentProducts === 'object' && 'products' in bankPaymentProducts
-      ? bankPaymentProducts.products.null
+      ? bankPaymentProducts.products.BANK_TRANSFER
       : null;
 
   console.log(invoices);

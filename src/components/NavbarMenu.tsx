@@ -1,6 +1,6 @@
 'use client';
 
-import { buttonVariants } from '@components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,6 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu';
+import handlerLogOut from '@lib/sessionLogOut';
 import { cn } from '@lib/utils';
 import { CircleUser } from 'lucide-react';
 import Link from 'next/link';
@@ -17,17 +18,6 @@ import { useRouter } from 'next/navigation';
 const NavbarMenu = () => {
   const router = useRouter();
 
-  const handlerLogOut = () => {
-    if (typeof window !== 'undefined') {
-      // remove cookies
-      document.cookie =
-        'session_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-      document.cookie =
-        'auth_data=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-
-      router.replace('/sign-in');
-    }
-  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
@@ -53,7 +43,12 @@ const NavbarMenu = () => {
         </DropdownMenuItem>
         <DropdownMenuItem>Support</DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handlerLogOut} className="cursor-pointer">
+        <DropdownMenuItem
+          onClick={() => {
+            handlerLogOut(router);
+          }}
+          className="cursor-pointer"
+        >
           Logout
         </DropdownMenuItem>
       </DropdownMenuContent>

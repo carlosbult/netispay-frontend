@@ -19,6 +19,7 @@ export interface ILoginResponseSuccessfully {
       expiresAt: string;
       userRole?: string;
     };
+    token: string;
   };
 }
 

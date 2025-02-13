@@ -1,6 +1,18 @@
 'use client';
+import { Button } from '@/components/ui/button';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { CheckCircledIcon } from '@radix-ui/react-icons';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { Button } from 'src/shared/components/ui/button';
+import { useForm } from 'react-hook-form';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from 'src/shared/components/ui/card';
 import {
   Form,
   FormControl,
@@ -14,19 +26,7 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from 'src/shared/components/ui/input-otp';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from 'src/shared/components/ui/card';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
 import { type z } from 'zod';
-import { CheckCircledIcon } from '@radix-ui/react-icons';
-import { useRouter } from 'next/navigation';
 import { setAuthCookie } from '../../../app/authServer';
 import { OtpSchema } from '../schema/auth.schema';
 import { type HotpFormProps } from '../types/auth.types';

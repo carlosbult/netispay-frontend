@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 'use client';
 
-import { Button } from '@components/ui/button';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from '@components/ui/form';
-import { Input } from '@components/ui/input';
-import { Label } from '@components/ui/label';
 import { Separator } from '@components/ui/separator';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -18,16 +18,17 @@ import {
   type TLoginSchemaValidator,
 } from '@lib/validators/login-validator';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Icons from 'src/components/Icons';
-import { useSessionLogin } from 'src/modules/auth/hooks/useAuth';
+import { handlerLoginAction } from '../actions';
 
 const LoginForm = () => {
   const [isPasswordVisible, setPasswordVisible] = useState(false);
   const router = useRouter();
-  const signIn = useSessionLogin();
+  // const signIn = useSessionLogin();
   const form = useForm<TLoginSchemaValidator>({
     resolver: zodResolver(loginSchemaValidator),
     defaultValues: {
@@ -36,36 +37,31 @@ const LoginForm = () => {
     },
   });
 
-  if (signIn.isSuccess) {
-    const isValid = signIn.data.data;
-    if (isValid != null) {
-      if (signIn.data.data.session.userRole === 'ADMIN') {
+  // if (signIn.isSuccess) {
+  //   const isValid = signIn.data.data;
+  //   if (isValid != null) {
+  //     if (signIn.data.data.session.userRole === 'ADMIN') {
+  //       router.push('/admin');
+  //     } else {
+  //       router.push('/overview');
+  //     }
+  //   }
+  // }
+
+  const onSubmit = async (formData: TLoginSchemaValidator) => {
+    // try {
+    //   signIn.mutate(formData);
+    // } catch (error) {
+    //   console.log(error);
+    // }
+    const response = await handlerLoginAction(formData);
+    if (response.success) {
+      if (response.data.data.session.userRole === 'ADMIN') {
         router.push('/admin');
       } else {
         router.push('/overview');
       }
     }
-  }
-
-  const onSubmit = async (formData: TLoginSchemaValidator) => {
-    try {
-      signIn.mutate(formData);
-    } catch (error) {
-      console.log(error);
-    }
-    // const result = await loginAction(formData);
-
-    // if (result.success) {
-    //   // Type narrowing - TypeScript knows result.data is ILoginResponseSuccessfully
-    //   console.log(
-    //     `Login successful! Session expires at ${result.data.data.session.expiresAt}`,
-    //   );
-    //   // Handle successful login
-    // } else {
-    //   // Type narrowing - TypeScript knows result.error is string
-    //   console.error(`Login failed: ${result.error}`);
-    //   // Handle error
-    // }
   };
 
   return (
@@ -77,9 +73,9 @@ const LoginForm = () => {
             name="email"
             render={({ field }) => (
               <FormItem className="space-y-0">
-                <Label htmlFor="email" className="font-normal ">
+                <FormLabel htmlFor="email" className="font-normal ">
                   Email
-                </Label>
+                </FormLabel>
                 <FormControl>
                   <Input
                     id="email"
@@ -101,12 +97,12 @@ const LoginForm = () => {
             name="password"
             render={({ field }) => (
               <FormItem className="space-y-0">
-                <div className="flex items-center">
-                  <Label
+                <div className="flex items-center pb-1">
+                  <FormLabel
                     htmlFor="password"
                     className="font-normal flex w-full justify-between"
                   >
-                    Your password
+                    Tu Contraseña
                     <button
                       className="flex items-center justify-center"
                       onClick={() => {
@@ -118,9 +114,9 @@ const LoginForm = () => {
                       ) : (
                         <EyeOffIcon className="w-4 h-4 mr-1" />
                       )}
-                      Hidden
+                      Ocultar
                     </button>
-                  </Label>
+                  </FormLabel>
                 </div>
                 <FormControl>
                   <Input
@@ -137,25 +133,25 @@ const LoginForm = () => {
             )}
           />
         </div>
-        <a
+        <Link
           href="/forgot-password"
           className="ml-auto inline-block text-sm underline "
         >
-          Forgot your password?
-        </a>
+          Olvidaste tu contraseña?
+        </Link>
         <Button type="submit" className="w-full">
-          Login
+          Iniciar
         </Button>
         <div className="flex items-center justify-center w-full">
           <Separator className=" w-[40%] opacity-35" />
-          <span className="px-4">Or</span>
+          <span className="px-4">O</span>
           <Separator className=" w-[40%] opacity-35" />
         </div>
         <Button variant="outline" className="w-full">
           <span className="mr-2">
             <Icons.GoogleIconColor className="h-4 w-4" />
           </span>
-          Login with Google
+          Iniciar con Google
         </Button>
       </form>
     </Form>

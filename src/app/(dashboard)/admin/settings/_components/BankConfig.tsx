@@ -1,3 +1,4 @@
+import { Badge } from '@components/ui/badge';
 import { Card, CardContent, CardHeader } from '@components/ui/card';
 import { Checkbox } from '@components/ui/checkbox';
 import {
@@ -29,7 +30,7 @@ const BankConfig = async () => {
       <Card className="overflow-hidden">
         <CardHeader>
           <h3 className="text-base md:text-lg font-semibold">
-            Banks configuration
+            Configuracion de los servicios de pago.
           </h3>
         </CardHeader>
         <CardContent className="p-0 md:p-3">
@@ -38,9 +39,9 @@ const BankConfig = async () => {
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-12"></TableHead>
-                  <TableHead>Bank</TableHead>
+                  <TableHead>Nombre</TableHead>
                   <TableHead className="hidden sm:table-cell">
-                    Product
+                    Servicio
                   </TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead className="w-12"></TableHead>
@@ -54,10 +55,10 @@ const BankConfig = async () => {
                     </TableCell>
                     <TableCell>{bank.banks.name}</TableCell>
                     <TableCell className="hidden sm:table-cell">
-                      {bank.name}
+                      {bank.label === '' ? bank.name : bank.label}
                     </TableCell>
                     <TableCell>
-                      <span
+                      {/* <span
                         className={`inline-flex px-2 py-1 rounded-full text-xs ${
                           bank.is_active
                             ? 'bg-green-100 text-green-800'
@@ -65,7 +66,22 @@ const BankConfig = async () => {
                         }`}
                       >
                         {bank.is_active ? 'Activo' : 'No disponible'}
-                      </span>
+                      </span> */}
+                      {bank.is_active ? (
+                        <Badge
+                          variant={'default'}
+                          className="pointer-events-none"
+                        >
+                          Activo
+                        </Badge>
+                      ) : (
+                        <Badge
+                          variant={'destructive'}
+                          className="pointer-events-none"
+                        >
+                          No disponible
+                        </Badge>
+                      )}
                     </TableCell>
                     <TableCell>
                       <BankConfigDialog bank={bank} />

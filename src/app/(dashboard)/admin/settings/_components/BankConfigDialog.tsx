@@ -34,6 +34,7 @@ import { Eye, EyeOff, SquareArrowOutUpRight } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { handlerUpdateBankProduct } from '../actions';
+import BankConfigSubForm from './BankConfigSubForm';
 
 interface IBankConfigDialogProps {
   bank: BankPaymentProduct;
@@ -54,12 +55,13 @@ const BankConfigDialog = (props: IBankConfigDialogProps) => {
       bank_commission_rate: bank.configurations[0].bank_commission_rate,
       bank_operation_rate: bank.configurations[0].bank_operation_rate,
       description: bank.configurations[0].description,
+      bank_product_specific_config: bank.bank_product_specific_config,
     },
   });
 
   async function onSubmit(values: TUpdateBankProduct) {
     const adapterData = updateBankProductAdapter(values, bank);
-    console.log(adapterData);
+    console.log('adapterData', adapterData);
     const response = await handlerUpdateBankProduct(
       adapterData,
       bank.id.toString(),
@@ -116,6 +118,7 @@ const BankConfigDialog = (props: IBankConfigDialogProps) => {
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -176,6 +179,7 @@ const BankConfigDialog = (props: IBankConfigDialogProps) => {
                           onCheckedChange={field.onChange}
                         />
                       </FormControl>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -223,6 +227,7 @@ const BankConfigDialog = (props: IBankConfigDialogProps) => {
                         <FormControl>
                           <Textarea {...field} value={field.value ?? ''} />
                         </FormControl>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
@@ -239,6 +244,7 @@ const BankConfigDialog = (props: IBankConfigDialogProps) => {
                         <FormControl>
                           <Input {...field} />
                         </FormControl>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
@@ -255,14 +261,17 @@ const BankConfigDialog = (props: IBankConfigDialogProps) => {
                         <FormControl>
                           <Input {...field} />
                         </FormControl>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
                 </div>
               </fieldset>
 
+              <BankConfigSubForm control={form.control} />
+
               <Button type="submit" className="w-full">
-                Save Changes
+                Guardar cambios
               </Button>
             </form>
           </Form>

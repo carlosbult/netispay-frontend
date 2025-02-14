@@ -1,11 +1,15 @@
-import { type BankPaymentProduct } from '@interfaces/paymentMethods.interface';
+import {
+  type BankPaymentProduct,
+  type IBankPaymentProductAdapter,
+  type IBankProductSpecificConfig,
+} from '@interfaces/paymentMethods.interface';
 import { type TUpdateBankProduct } from '@lib/validators/updateBankProduct-validator';
 
 const updateBankProductAdapter = (
   newData: TUpdateBankProduct,
   oldData: BankPaymentProduct,
-): Partial<BankPaymentProduct> => {
-  const patch: Partial<BankPaymentProduct> = {};
+): Partial<IBankPaymentProductAdapter> => {
+  const patch: Partial<IBankPaymentProductAdapter> = {};
 
   // Compare top-level fields
   if (newData.is_active !== oldData.is_active) {
@@ -19,11 +23,8 @@ const updateBankProductAdapter = (
   }
 
   // Update configuration values (description, bank_commission_rate, bank_operation_rate)
-  // Assume that the update applies to the first configuration in the array.
-  if (oldData.configurations != null && oldData.configurations.length > 0) {
+  if (oldData.configurations?.length > 0) {
     const oldConfig = oldData.configurations[0];
-
-    // Build a patch for the configuration item
     const configPatch: Partial<typeof oldConfig> = {};
 
     if (newData.description !== oldConfig.description) {
@@ -36,15 +37,60 @@ const updateBankProductAdapter = (
       configPatch.bank_operation_rate = newData.bank_operation_rate;
     }
 
-    // Only update configurations if there's at least one changed field.
     if (Object.keys(configPatch).length > 0) {
-      // Here we update the first configuration. If you need to update a specific one,
-      // adjust the lookup logic accordingly.
       patch.configurations = [{ ...oldConfig, ...configPatch }];
     }
   }
 
+  // 🔹 Handle `bank_product_specific_config`
+  if (
+    Array.isArray(newData.bank_product_specific_config) &&
+    newData.bank_product_specific_config.length > 0
+  ) {
+    const updatedConfigs: Array<Omit<IBankProductSpecificConfig, 'id'>> = [];
+
+    newData.bank_product_specific_config.forEach((newConfig) => {
+      // Create a new object WITHOUT `id`
+      const newConfigWithoutId: Omit<IBankProductSpecificConfig, 'id'> = {
+        property_key: newConfig.property_key,
+        property_value: newConfig.property_value,
+        title: newConfig.title,
+        description: newConfig.description,
+      };
+
+      const oldConfig = oldData.bank_product_specific_config?.find(
+        (c) => c.id === newConfig.id,
+      );
+
+      if (
+        oldConfig == null ||
+        hasConfigChanged(newConfigWithoutId, oldConfig)
+      ) {
+        updatedConfigs.push(newConfigWithoutId);
+      }
+    });
+
+    if (updatedConfigs.length > 0) {
+      patch.properties = updatedConfigs;
+    }
+  }
+
   return patch;
+};
+
+/**
+ * 🔍 Function to check if there are changes in a specific configuration.
+ */
+const hasConfigChanged = (
+  newConfig: IBankProductSpecificConfig,
+  oldConfig: IBankProductSpecificConfig,
+): boolean => {
+  return (
+    newConfig.property_key !== oldConfig.property_key ||
+    newConfig.property_value !== oldConfig.property_value ||
+    newConfig.title !== oldConfig.title ||
+    newConfig.description !== oldConfig.description
+  );
 };
 
 export default updateBankProductAdapter;

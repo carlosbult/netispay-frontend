@@ -12,6 +12,7 @@ import {
   FormMessage,
 } from '@components/ui/form';
 import { Separator } from '@components/ui/separator';
+import { useToast } from '@components/ui/use-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   loginSchemaValidator,
@@ -28,6 +29,7 @@ import { handlerLoginAction } from '../actions';
 const LoginForm = () => {
   const [isPasswordVisible, setPasswordVisible] = useState(false);
   const router = useRouter();
+  const { toast } = useToast();
   // const signIn = useSessionLogin();
   const form = useForm<TLoginSchemaValidator>({
     resolver: zodResolver(loginSchemaValidator),
@@ -49,18 +51,41 @@ const LoginForm = () => {
   // }
 
   const onSubmit = async (formData: TLoginSchemaValidator) => {
-    // try {
-    //   signIn.mutate(formData);
-    // } catch (error) {
-    //   console.log(error);
-    // }
     const response = await handlerLoginAction(formData);
     if (response.success) {
       if (response.data.data.session.userRole === 'ADMIN') {
-        router.push('/admin');
+        toast({
+          title: 'Inicio de sesión exitoso',
+          description: 'Se ha iniciado sesion correctamente sera redirigido...',
+          duration: 3000,
+        });
+        setTimeout(() => {
+          router.push('/admin');
+        }, 1000);
       } else {
-        router.push('/overview');
+        toast({
+          title: 'Inicio de sesión exitoso',
+          description: 'Se ha iniciado sesion correctamente sera redirigido...',
+          duration: 3000,
+        });
+        setTimeout(() => {
+          router.push('/overview');
+        }, 1000);
       }
+    } else if (!response.success) {
+      toast({
+        title: 'Error al iniciar sesión',
+        description: response.error,
+        variant: 'destructive',
+        duration: 3000,
+      });
+    } else {
+      toast({
+        title: 'Error al iniciar sesión',
+        description: 'Error desconocido',
+        variant: 'destructive',
+        duration: 3000,
+      });
     }
   };
 

@@ -43,15 +43,14 @@ const ISPConfig = async (props: IISPProps) => {
         </Link>
       </div>
       <Card className="w-full max-w-full ">
-        <CardHeader className="rounded-t-sm bg-red-600/10 text-destructive">
+        <CardHeader className="rounded-t-sm bg-red-600/30 text-destructive">
           <div className="flex flex-row items-center  gap-2 ">
             <AlertTriangle className="h-5 w-5" />
-            <div className="text-lg font-semibold">API Access Warning</div>
+            <div className="text-lg font-semibold">
+              Cuidado al modificar los datos de la API
+            </div>
           </div>
-          <p>
-            This ISP configuration is currently inactive. Please update the
-            configuration to activate the ISP.
-          </p>
+          <p>Esta es la configuracion actual de tu ISP</p>
         </CardHeader>
         <CardContent className="grid gap-4 p-6">
           <div className="space-y-2">
@@ -99,9 +98,9 @@ const ISPConfig = async (props: IISPProps) => {
             </div>
           </div>
         </CardContent>
-        <CardFooter className="border-t border-border/25 bg-muted/50 px-6 py-4">
-          <p className="text-xs text-muted-foreground">
-            Last updated:{' '}
+        <CardFooter className="border-t border-border/25 bg-muted-foreground px-6 py-4 rounded-b-md">
+          <p className="text-xs text-muted">
+            Ultima Actualización:{' '}
             {new Date(currentIspConfig.isp[0].created_at).toLocaleDateString()}
           </p>
         </CardFooter>

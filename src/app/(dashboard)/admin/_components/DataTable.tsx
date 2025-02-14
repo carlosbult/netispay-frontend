@@ -102,7 +102,7 @@ export const DataTable = (props: DataTableProps) => {
             </TableHeader>
             <TableBody>
               {data.map((element) => (
-                <TableRow className="bg-accent" key={element.id}>
+                <TableRow className="bg-card" key={element.id}>
                   <TableCell>
                     <div className="font-medium">
                       {element.invoice_payments[0].client_profile?.name}

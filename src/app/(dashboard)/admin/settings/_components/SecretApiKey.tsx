@@ -30,7 +30,7 @@ const SecretApiKey = (props: ISecretApiKeyProps) => {
     <div className="space-y-2">
       <h3 className="font-medium">API Key</h3>
       <div className="flex items-center gap-2">
-        <code className="flex-1 rounded bg-muted p-2 font-mono text-sm">
+        <code className="flex-1 rounded bg-background p-2 font-mono text-sm border border-border">
           {showKey ? ispKey : maskedKey}
         </code>
         <Button

@@ -1,7 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@components/ui/card';
 import { DataTable } from 'src/app/(dashboard)/admin/_components/DataTable';
 import MaxWidthWrapper from 'src/components/MaxWidthWrapper';
-import { formatCurrency } from 'src/lib/fomartCurrency';
 import { handlerGetTransactions } from './settings/actions';
 
 const Page = async () => {
@@ -37,7 +35,7 @@ const Page = async () => {
         </div>
       </div> */}
 
-      <div className="grid md:grid-cols-5 grid-cols-2 gap-4">
+      {/* <div className="grid md:grid-cols-5 grid-cols-2 gap-4">
         <Card>
           <CardHeader>
             <CardTitle>Total</CardTitle>
@@ -73,7 +71,7 @@ const Page = async () => {
             <p className="text-xl font-bold">{formatCurrency(17456, 'USD')}</p>
           </CardContent>
         </Card>
-      </div>
+      </div> */}
 
       <div
       // className={`grid transition-all duration-300 ${

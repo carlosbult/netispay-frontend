@@ -6,12 +6,10 @@ ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
 # Añadir argumentos de build
-ARG NEXT_PUBLIC_API_URL
-ARG BASE_API_URL
+ARG NEXT_PUBLIC_API_BASE_URL
 
 # Configurar variables de entorno REQUERIDAS (no optional)
-ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
-ENV BASE_API_URL=${BASE_API_URL}
+ENV NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL}
 
 # Establece el directorio de trabajo
 WORKDIR /app

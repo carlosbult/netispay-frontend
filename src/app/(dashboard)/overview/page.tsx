@@ -48,19 +48,17 @@ const ClientPage = async ({
       return (
         <MaxWidthWrapper>
           <div className="w-full min-h-screen flex items-center justify-center">
-            <div className="-mt-14 max-w-[500px] w-full space-y-4 ">
+            <div className="-mt-14 max-w-[500px] mx-auto w-full space-y-4 px-2">
               <h1 className="text-2xl font-bold text-center">
-                You don&apos;t have any invoices yet
+                ¡No tienes facturas pendientes!
               </h1>
-              <p className=" text-muted-foreground text-pretty">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut.
+              <p className="text-muted-foreground md:text-pretty text-center">
+                Todo está en orden. Actualmente no tienes facturas pendientes de
+                pago en tu servicio de internet.
               </p>
-              <p className=" text-muted-foreground text-pretty">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              <p className="text-muted-foreground text-pretty text-center">
+                Si esperabas ver una factura aquí, verifica tu historial de
+                pagos o contacta con nuestro soporte.
               </p>
 
               <div className="w-full flex justify-center">
@@ -68,7 +66,7 @@ const ClientPage = async ({
                   href="/invoices-history"
                   className={cn(buttonVariants({ variant: 'link' }))}
                 >
-                  View history <ChevronRight className="w-5 h-5" />
+                  Ver historial <ChevronRight className="w-5 h-5" />
                 </Link>
               </div>
             </div>

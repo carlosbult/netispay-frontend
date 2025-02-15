@@ -43,7 +43,7 @@ export const NavUser = ({
 
   const closeSession = async () => {
     await closeSessionOnServer();
-    router.push('/login');
+    router.push('/sign-in');
   };
 
   return (

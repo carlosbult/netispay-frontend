@@ -59,7 +59,7 @@ const data = {
         },
         {
           title: 'Comisiones',
-          url: '/admin/settings?section=commissions-config',
+          url: '/admin/settings/commissions',
         },
       ],
     },

@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -11,40 +10,41 @@ import {
 } from '@components/ui/dropdown-menu';
 import { Label } from '@components/ui/label';
 import { type BankPaymentProduct } from '@interfaces/paymentMethods.interface';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
+import MobilePayForm from './C2pForm';
 import VerificationApiForm from './VerificationApiForm';
 
 interface IBankTransferProps {
   bankProducts: BankPaymentProduct[];
 }
 
-const payMethods = [
-  {
-    id: '1',
-    name: 'VERIFICATION_API',
-    label: 'Verification API',
-  },
-  {
-    id: '2',
-    name: 'C2P',
-    label: 'Mobile Payment',
-  },
-  // {
-  //   id: '3',
-  //   name: 'BANK_TRANSFER',
-  //   label: 'Bank Transfer',
-  // },
-  {
-    id: '3',
-    name: 'PAY_BUTTON',
-    label: 'Pay Button',
-  },
-];
+// const payMethods = [
+//   {
+//     id: '1',
+//     name: 'VERIFICATION_API',
+//     label: 'Verification API',
+//   },
+//   {
+//     id: '2',
+//     name: 'C2P',
+//     label: 'Mobile Payment',
+//   },
+//   // {
+//   //   id: '3',
+//   //   name: 'BANK_TRANSFER',
+//   //   label: 'Bank Transfer',
+//   // },
+//   {
+//     id: '3',
+//     name: 'PAY_BUTTON',
+//     label: 'Pay Button',
+//   },
+// ];
 
 const BankTransfer = (props: IBankTransferProps) => {
   const { bankProducts } = props;
   const [bankTransferType, setBankTransferType] = useState<null | string>(null);
-  const [methods, setMethods] = useState<BankPaymentProduct[]>([]);
+  // const [methods, setMethods] = useState<BankPaymentProduct[]>([]);
   const [banksSelected, setBanksSelected] = useState<null | number>(null);
 
   // const getBankMethods = async () => {
@@ -59,28 +59,23 @@ const BankTransfer = (props: IBankTransferProps) => {
 
   const banksAvailable = useMemo(() => {
     const banks = [];
-    if (methods.length > 0) {
-      const findCurrent = methods.find(
+    if (bankProducts.length > 0) {
+      const findCurrent = bankProducts.find(
         (method) => method.name === bankTransferType,
       );
       banks.push(findCurrent?.banks);
     }
     return banks;
-  }, [methods, bankTransferType]);
+  }, [bankProducts, bankTransferType]);
 
-  useEffect(() => {
-    const targetBanks = ['BANESCO', 'BANCO DEL CARIBE'];
+  // useEffect(() => {
+  //   // Buscar productos que coincidan con los bancos objetivo
 
-    // Buscar productos que coincidan con los bancos objetivo
-    const bankTransferProducts = bankProducts.filter((product) =>
-      targetBanks.some((bank) => product.banks.name.includes(bank)),
-    );
-
-    // Establecer métodos si se encuentra un producto válido
-    if (bankTransferProducts != null) {
-      setMethods(bankTransferProducts);
-    }
-  }, [bankProducts]);
+  //   // Establecer métodos si se encuentra un producto válido
+  //   if (bankTransferProducts != null) {
+  //     setMethods(bankTransferProducts);
+  //   }
+  // }, [bankProducts]);
 
   return (
     <div className="pt-4">
@@ -89,7 +84,7 @@ const BankTransfer = (props: IBankTransferProps) => {
         tempor incididunt ut labore et dolore magna aliqua.
       </p>
       <div className="inline-flex flex-wrap gap-4  py-4">
-        {payMethods.map((method) => (
+        {bankProducts.map((method) => (
           <Button
             key={method.id}
             variant={bankTransferType === method.name ? 'default' : 'outline'}
@@ -97,26 +92,23 @@ const BankTransfer = (props: IBankTransferProps) => {
               setBankTransferType(method.name);
             }}
           >
-            {method.label}
+            {method.label === '' ? method.name : method.label}
           </Button>
         ))}
       </div>
       {bankTransferType != null && bankTransferType === 'VERIFICATION_API' && (
         <VerificationApiForm
           paymentMethod={bankProducts.find(
-            (element) =>
-              element.name === 'VERIFICATION_API' &&
-              element.banks.name === 'BANESCO',
+            (element) => element.name === 'VERIFICATION_API',
           )}
         />
       )}
       {bankTransferType != null && bankTransferType === 'C2P' && (
-        <div className="space-y-4">
-          <Input placeholder="Número de teléfono" />
-          <Input placeholder="Cédula" />
-          <Input placeholder="Referencia" />
-          <Button className="w-full">Confirmar pago</Button>
-        </div>
+        <MobilePayForm
+          paymentMethod={bankProducts.filter(
+            (element) => element.name === 'C2P',
+          )}
+        />
       )}
       {bankTransferType != null && bankTransferType === 'PAY_BUTTON' && (
         <div className="flex flex-col gap-4">

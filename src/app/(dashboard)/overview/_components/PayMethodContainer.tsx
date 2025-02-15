@@ -16,9 +16,22 @@ const PaymentMethodContainer = (props: IPaymentMethodContainerProps) => {
   // const typeC2P = bankProducts.find((product) => product.name === 'C2P');
 
   if (method === 'bank-transfer')
-    return <BankTransfer bankProducts={bankProducts} />;
+    return (
+      <BankTransfer
+        bankProducts={bankProducts.filter(
+          (element) => element.payment_category === 'BANK_TRANSFER',
+        )}
+      />
+    );
 
-  if (method === 'binance') return <Crypto bankProducts={bankProducts} />;
+  if (method === 'binance')
+    return (
+      <Crypto
+        bankProducts={bankProducts.filter(
+          (element) => element.payment_category === 'CRYPTO',
+        )}
+      />
+    );
 
   if (method === 'payPal') return <PayPal />;
 

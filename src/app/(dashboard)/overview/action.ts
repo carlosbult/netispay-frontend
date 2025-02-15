@@ -4,6 +4,10 @@ import { type ApiErrorResponse } from '@interfaces/errors.interface';
 import { type Invoice } from '@interfaces/invoice.interface';
 import { type BankPaymentProduct } from '@interfaces/paymentMethods.interface';
 import { getSessionTokenOnServer } from '@lib/auth';
+import {
+  calculateMontToPay,
+  type IMontToPay,
+} from '@lib/request/payment_request';
 import { requestUserLogged } from '@lib/request/server/getUserLogged';
 import { cookies } from 'next/headers';
 
@@ -105,4 +109,37 @@ export const handlerGetUserSession = async () => {
 
     return null; // Return null or a fallback value in case of an error
   }
+};
+
+export const handlerUpdateISPCommission = async (
+  data: IMontToPay,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): Promise<any> => {
+  const response = await calculateMontToPay(data);
+  return response;
+  // if (response != null) {
+  //   if ('errorCode' in response) {
+  //     return {
+  //       type: 'ERROR',
+  //       title: 'Ha ocurrido un error',
+  //       description: response.message,
+  //       message: response.details,
+  //     };
+  //   }
+  //   return {
+  //     type: 'SUCCESS',
+  //     title: 'Actualización completada',
+  //     message: 'Actualización completada con exito',
+  //     description:
+  //       'La configuración de comisiones para esta isp ha sido creado correctamente',
+  //   };
+  // } else {
+  //   return {
+  //     type: 'ERROR',
+  //     title: 'Error Inesperado',
+  //     description:
+  //       'Ha ocurrido un error inesperado, verifica los datos o ponte en contacto con nuestro equipo ',
+  //     message: 'An unknown error occurred',
+  //   };
+  // }
 };

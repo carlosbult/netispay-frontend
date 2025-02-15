@@ -129,6 +129,7 @@ const LoginForm = () => {
                   >
                     Tu Contraseña
                     <button
+                      type="button"
                       className="flex items-center justify-center"
                       onClick={() => {
                         setPasswordVisible((prev) => !prev);

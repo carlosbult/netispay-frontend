@@ -97,9 +97,9 @@ export const BreadcrumbNav = () => {
           label: 'Configuración de bancos',
         });
       }
-      if (element.includes('section=commissions-config')) {
+      if (element === 'commissions') {
         bread.push({
-          href: '/admin/settings?section=commissions-config',
+          href: '/admin/settings/commissions',
           label: 'Configuración de comisiones',
         });
       }

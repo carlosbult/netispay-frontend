@@ -10,13 +10,18 @@ import {
 } from '@components/ui/form';
 import { Label } from '@components/ui/label';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { type BankPaymentProduct } from '@interfaces/paymentMethods.interface';
 import {
   c2PValidator,
   type TC2PValidator,
 } from '@lib/validators/c2p-validator';
 import { useForm } from 'react-hook-form';
 
-const C2PForm = () => {
+interface IMobilePayFormProps {
+  paymentMethod?: BankPaymentProduct[];
+}
+
+const MobilePayForm = (props: IMobilePayFormProps) => {
   const form = useForm<TC2PValidator>({
     resolver: zodResolver(c2PValidator),
     defaultValues: {},
@@ -31,7 +36,7 @@ const C2PForm = () => {
         <div className="grid gap-2">
           <FormField
             control={form.control}
-            name="document"
+            name="document_id"
             render={({ field }) => (
               <FormItem className="space-y-0">
                 <Label htmlFor="document" className="font-normal ">
@@ -54,7 +59,7 @@ const C2PForm = () => {
         <div className="grid gap-2">
           <FormField
             control={form.control}
-            name="phoneNumber"
+            name="phone_number"
             render={({ field }) => (
               <FormItem className="space-y-0">
                 <Label htmlFor="phoneNumber" className="font-normal ">
@@ -106,4 +111,4 @@ const C2PForm = () => {
   );
 };
 
-export default C2PForm;
+export default MobilePayForm;

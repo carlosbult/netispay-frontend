@@ -26,6 +26,7 @@ import {
   type TSignUpValidator,
 } from '@lib/validators/register-validator';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Icons from 'src/components/Icons';
@@ -34,6 +35,7 @@ import { handlerCreateUser } from '../actions';
 const RegisterForm = () => {
   const [isPasswordVisible, setPasswordVisible] = useState(false);
   const { toast } = useToast();
+  const router = useRouter();
 
   const form = useForm<TSignUpValidator>({
     resolver: zodResolver(SignUpSchemaValidator),
@@ -58,6 +60,9 @@ const RegisterForm = () => {
         title: createUser.title,
         description: createUser.description,
       });
+      setTimeout(() => {
+        router.push('/sign-in');
+      }, 1000);
     } else if (createUser.type === 'ERROR') {
       toast({
         title: createUser.title,

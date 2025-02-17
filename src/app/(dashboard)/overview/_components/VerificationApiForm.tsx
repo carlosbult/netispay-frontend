@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useInvoiceSelection } from '@/store/useInvoiceSelection';
 import { Calendar } from '@components/ui/calendar';
 import {
   Form,
@@ -23,7 +24,6 @@ import { cn } from '@lib/utils';
 import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { useInvoiceSelection } from 'src/shared/store/useInvoiceSelection';
 import { z } from 'zod';
 
 interface IVerificationApiFormProps {

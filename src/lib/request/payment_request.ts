@@ -3,6 +3,11 @@ import {
   type ApiErrorResponse,
   type CustomApiError,
 } from '@interfaces/errors.interface';
+import {
+  type ICalculateMontToPay,
+  type IPayInvoiceGeneric,
+} from '@interfaces/payment';
+import { getSessionTokenOnServer } from '@lib/auth';
 import { API_BASE_URL, ApiService } from './apiRequest';
 
 const api = new ApiService(API_BASE_URL);
@@ -20,15 +25,40 @@ export interface IMontToPay {
 
 export async function calculateMontToPay(
   commission: IMontToPay,
-): Promise<any | ApiErrorResponse | CustomApiError | null> {
+): Promise<ICalculateMontToPay | ApiErrorResponse | CustomApiError | null> {
   try {
-    const response = await api.post<any>(
+    const token = await getSessionTokenOnServer();
+    if (token == null) {
+      return null;
+    }
+    const response = await api.post<ICalculateMontToPay>(
       `/currency-rates/payment-calculator`,
       commission,
+      {
+        Cookie: `${token.name}=${token.value}`,
+      },
     );
     return response;
   } catch (error) {
     console.error('Error update the isp commission', error);
+    return null;
+  }
+}
+
+export async function payInvoice(
+  data: IPayInvoiceGeneric,
+): Promise<any | ApiErrorResponse | CustomApiError | null> {
+  try {
+    const token = await getSessionTokenOnServer();
+    if (token == null) {
+      return null;
+    }
+    const response = await api.post<any>(`/invoices/payInvoice`, data, {
+      Cookie: `${token.name}=${token.value}`,
+    });
+    return response;
+  } catch (error) {
+    console.error('Error paying the invoice', error);
     return null;
   }
 }

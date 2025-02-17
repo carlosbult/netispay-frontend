@@ -8,6 +8,12 @@ export interface IBankProductSpecificConfig {
   description: string;
 }
 
+export interface IBanksDetails {
+  id: number;
+  name: string;
+  code: string;
+}
+
 export interface BankPaymentProduct {
   id: number;
   bank_id: number;
@@ -27,11 +33,7 @@ export interface BankPaymentProduct {
     bank_operation_rate: number;
     currency: currencies;
   }>;
-  banks: {
-    id: number;
-    name: string;
-    code: string;
-  };
+  banks: IBanksDetails;
 }
 
 export interface IBankPaymentProductAdapter extends BankPaymentProduct {

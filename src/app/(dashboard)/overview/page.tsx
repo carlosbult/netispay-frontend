@@ -7,12 +7,14 @@ import {
   CardHeader,
   CardTitle,
 } from '@components/ui/card';
+import { ScrollArea } from '@components/ui/scroll-area';
 import { cn } from '@lib/utils';
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import MaxWidthWrapper from 'src/components/MaxWidthWrapper';
 import BillingCardContainer from './_components/BillingCardContainer';
 import History from './_components/History';
+import PaymentDetailsCard from './_components/PaymentDetailsCard';
 import StepByStepPayment from './_components/StepByStepPayment';
 import {
   handlerGetInvoices,
@@ -79,32 +81,37 @@ const ClientPage = async ({
     // console.log('Invoices fetched successfully:', result.invoices);
     return (
       <div className="flex flex-col w-full h-full">
-        <MaxWidthWrapper className="grid grid-cols-2 gap-10 pt-6">
-          <Card className="h-fit">
-            <CardHeader>
-              <CardTitle>Pick your billing</CardTitle>
-              <CardDescription>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <BillingCardContainer invoices={invoices.invoices} />
-            </CardContent>
-            <CardFooter>
-              {'errorCode' in allInvoices ? (
-                <div>
-                  <p className="text-red-500">Error fetching invoices</p>
-                </div>
-              ) : (
-                <History invoices={allInvoices.invoices} />
-              )}
-            </CardFooter>
-          </Card>
-          <StepByStepPayment bankProducts={bankPaymentMethods ?? []} />
-        </MaxWidthWrapper>
+        <ScrollArea className="h-[90vh] w-full">
+          <MaxWidthWrapper className="flex gap-10 pt-6">
+            <div className="space-y-8 max-w-[50%]">
+              <Card className="h-fit">
+                <CardHeader>
+                  <CardTitle>Pick your billing</CardTitle>
+                  <CardDescription>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                    do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                    ullamco laboris nisi ut.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <BillingCardContainer invoices={invoices.invoices} />
+                </CardContent>
+                <CardFooter>
+                  {'errorCode' in allInvoices ? (
+                    <div>
+                      <p className="text-red-500">Error fetching invoices</p>
+                    </div>
+                  ) : (
+                    <History invoices={allInvoices.invoices} />
+                  )}
+                </CardFooter>
+              </Card>
+              <PaymentDetailsCard />
+            </div>
+            <StepByStepPayment bankProducts={bankPaymentMethods ?? []} />
+          </MaxWidthWrapper>
+        </ScrollArea>
       </div>
     );
   }

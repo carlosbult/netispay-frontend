@@ -1,5 +1,6 @@
 'use client';
 import { Button } from '@/components/ui/button';
+import { useInvoiceSelection } from '@/store/useInvoiceSelection';
 import { ErrorCard } from '@components/ErrorCard';
 import { LoadingState } from '@components/Loader';
 import { type Invoice } from 'src/interfaces/invoice.interface';
@@ -12,7 +13,6 @@ import {
   CardHeader,
   CardTitle,
 } from 'src/shared/components/ui/card';
-import { useInvoiceSelection } from 'src/shared/store/useInvoiceSelection';
 
 export const UnpaidInvoicesList = () => {
   const { data, isPending, error } = useInvoices(1);

@@ -1,11 +1,17 @@
 'use server';
 
+import { type IHandlerResponseToToast } from '@/app/(auth)/sign-up/actions';
 import { type ApiErrorResponse } from '@interfaces/errors.interface';
 import { type Invoice } from '@interfaces/invoice.interface';
+import {
+  type ICalculateMontToPay,
+  type IPayInvoiceGeneric,
+} from '@interfaces/payment';
 import { type BankPaymentProduct } from '@interfaces/paymentMethods.interface';
 import { getSessionTokenOnServer } from '@lib/auth';
 import {
   calculateMontToPay,
+  payInvoice,
   type IMontToPay,
 } from '@lib/request/payment_request';
 import { requestUserLogged } from '@lib/request/server/getUserLogged';
@@ -111,35 +117,50 @@ export const handlerGetUserSession = async () => {
   }
 };
 
-export const handlerUpdateISPCommission = async (
+export const handlerGetMountToPay = async (
   data: IMontToPay,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-): Promise<any> => {
+): Promise<ICalculateMontToPay | null> => {
   const response = await calculateMontToPay(data);
+  if (response == null) {
+    console.error('Error calculating the mount to pay');
+    return null;
+  }
+  if ('errorCode' in response) {
+    console.error('Error calculating the mount to pay');
+    return null;
+  }
   return response;
-  // if (response != null) {
-  //   if ('errorCode' in response) {
-  //     return {
-  //       type: 'ERROR',
-  //       title: 'Ha ocurrido un error',
-  //       description: response.message,
-  //       message: response.details,
-  //     };
-  //   }
-  //   return {
-  //     type: 'SUCCESS',
-  //     title: 'Actualización completada',
-  //     message: 'Actualización completada con exito',
-  //     description:
-  //       'La configuración de comisiones para esta isp ha sido creado correctamente',
-  //   };
-  // } else {
-  //   return {
-  //     type: 'ERROR',
-  //     title: 'Error Inesperado',
-  //     description:
-  //       'Ha ocurrido un error inesperado, verifica los datos o ponte en contacto con nuestro equipo ',
-  //     message: 'An unknown error occurred',
-  //   };
-  // }
+};
+
+export const handlerPayInvoices = async (
+  data: IPayInvoiceGeneric,
+): Promise<IHandlerResponseToToast> => {
+  const response = await payInvoice(data);
+  if (response != null) {
+    if ('errorCode' in response) {
+      console.error(response);
+      return {
+        type: 'ERROR',
+        title: 'Ha ocurrido un error',
+        description: response.message,
+        message: response.details,
+      };
+    }
+    return {
+      type: 'SUCCESS',
+      title: 'Actualización completada',
+      message: 'Actualización completada con exito',
+      description:
+        'La configuración de comisiones para esta isp ha sido creado correctamente',
+    };
+  } else {
+    return {
+      type: 'ERROR',
+      title: 'Error Inesperado',
+      description:
+        'Ha ocurrido un error inesperado, verifica los datos o ponte en contacto con nuestro equipo ',
+      message: 'An unknown error occurred',
+    };
+  }
 };

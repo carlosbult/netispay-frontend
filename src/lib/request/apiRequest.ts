@@ -19,7 +19,7 @@ class ApiService {
     } catch (e) {
       console.error('Failed to parse error response', e);
     }
-
+    console.error('Error response:', errorData);
     throw new CustomApiError(
       errorData?.message ?? 'Unknown error',
       errorData?.statusCode ?? response.status ?? 500,

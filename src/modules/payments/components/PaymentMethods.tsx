@@ -1,6 +1,7 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useInvoiceSelection } from '@/store/useInvoiceSelection';
 import { ErrorCard } from '@components/ErrorCard';
 import { LoadingState } from '@components/Loader';
 import { Alert, AlertDescription } from '@components/ui/alert';
@@ -8,7 +9,6 @@ import { Badge } from '@components/ui/badge';
 import Image from 'next/image';
 import { PaymentCalculation } from 'src/modules/users/components/PaymentCalculation';
 import { Card, CardContent } from 'src/shared/components/ui/card';
-import { useInvoiceSelection } from 'src/shared/store/useInvoiceSelection';
 import {
   getPaymentMethodName,
   type PaymentMethodType,

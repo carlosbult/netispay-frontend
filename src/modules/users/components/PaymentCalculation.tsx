@@ -1,4 +1,5 @@
 'use client';
+import { useInvoiceSelection } from '@/store/useInvoiceSelection';
 import { ErrorCard } from '@components/ErrorCard';
 import { LoadingState } from '@components/Loader';
 import { Badge } from '@components/ui/badge';
@@ -10,7 +11,6 @@ import {
   CardHeader,
   CardTitle,
 } from 'src/shared/components/ui/card';
-import { useInvoiceSelection } from 'src/shared/store/useInvoiceSelection';
 
 export const PaymentCalculation = () => {
   const { totalAmount, selectedPaymentMethod } = useInvoiceSelection();

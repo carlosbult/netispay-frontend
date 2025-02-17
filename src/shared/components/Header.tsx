@@ -1,4 +1,5 @@
 'use client';
+import { useAuthStore } from '@/store/useAuthStore';
 import { API_BASE_URL, ApiService } from '@services/api/api.service';
 import {
   CircleUserRound,
@@ -12,7 +13,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { handleClientLogout } from 'src/app/authClient';
 import { removeAuthCookie } from 'src/app/authServer';
-import { useAuthStore } from 'src/shared/store/useAuthStore';
 import { Button } from '../../components/ui/button';
 import { type RoleNavigation } from '../../interfaces/header.interface';
 import {

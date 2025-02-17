@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { type InvoiceSelectionStore } from '../../interfaces/invoice.interface';
+import { type InvoiceSelectionStore } from '../interfaces/invoice.interface';
 
 export const useInvoiceSelection = create<InvoiceSelectionStore>((set) => ({
   selectedInvoices: [],

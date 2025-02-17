@@ -1,7 +1,7 @@
 'use client';
+import { useAuthStore } from '@/store/useAuthStore';
 import { useQuery } from '@tanstack/react-query';
 import { type Invoice } from 'src/interfaces/invoice.interface';
-import { useAuthStore } from 'src/shared/store/useAuthStore';
 import { userService } from '../api/users.service';
 
 // Definimos la interfaz para la respuesta

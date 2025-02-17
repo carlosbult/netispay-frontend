@@ -1,6 +1,6 @@
 'use client';
+import { useAuthStore } from '@/store/useAuthStore';
 import { useQuery } from '@tanstack/react-query';
-import { useAuthStore } from 'src/shared/store/useAuthStore';
 import { userService } from '../api/users.service';
 import { type UserResponse } from '../types/users.interface';
 

@@ -2,7 +2,7 @@ import {
   type LoginCredentials,
   type LoginResponse,
 } from '@interfaces/auth.interface';
-import { API_BASE_URL, ApiService } from '@services/api/api.service';
+import { API_BASE_URL, ApiService } from '@lib/request/apiRequest';
 import {
   type GenerateLoginOTPResponse,
   type OTPVerification,

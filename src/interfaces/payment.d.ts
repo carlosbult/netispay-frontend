@@ -1,3 +1,7 @@
+interface IInvoiceDetailsToPay {
+  id: string;
+  amount: number;
+}
 interface IPayInvoiceGeneric {
   userId: number;
   bankCode: string;
@@ -6,21 +10,36 @@ interface IPayInvoiceGeneric {
   allowPartialPayment: boolean;
   balanceApplied: number;
   paymentData: {
-    transactionDate: string;
-    reference: string;
-
-    // "bankCode": "0138",
-    // "documentId": "V00018184460",
-    // "phoneNumber": "4244445566",
-    // "otp": "40110069",
+    // Datos fijos
     amount: number;
     currency: string;
     exchangeRate: number;
+    // Datos variables
+    bankCode?: string;
+    otp?: string;
+    transactionDate?: Date;
+    documentId?: string;
+    email?: string;
+    phoneNumber?: string;
+    reference?: string;
+    ipClient?: string;
   };
-  invoices: [
-    {
-      id: string;
-      amount: number;
-    },
-  ];
+  invoices: IInvoiceDetailsToPay[];
+}
+export interface IPaymentDetailsToPay {
+  baseAmount: number;
+  ivaAmount: number;
+}
+
+export interface ICalculateMontToPay {
+  amount: number;
+  details: IPaymentDetailsToPay;
+  includesIGTF: boolean;
+  includesIVA: boolean;
+  allowPartialPayment: boolean;
+  originalAmount: number;
+  balanceApplied: number;
+  currency: string;
+  exchangeRate: number;
+  operationCost: boolean;
 }

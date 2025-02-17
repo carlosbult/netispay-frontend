@@ -1,10 +1,10 @@
 'use client';
 
+import { useInvoiceSelection } from '@/store/useInvoiceSelection';
 import { CheckIcon, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { type Invoice } from 'src/interfaces/invoice.interface';
 import { cn } from 'src/lib/utils';
-import { useInvoiceSelection } from 'src/shared/store/useInvoiceSelection';
 
 // interface IBillingCard {
 //   id: string;

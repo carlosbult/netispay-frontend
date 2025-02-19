@@ -102,13 +102,13 @@ const BankTransfer = (props: IBankTransferProps) => {
             eiusmod tempor incididunt ut labore et dolore magna aliqua.
           </p>
           <div className="ml-auto flex flex-col items-end">
-            <Label className="pb-2">Chose your bank:</Label>
+            <Label className="pb-2">Seleccione su banco:</Label>
             <DropdownMenu>
               <DropdownMenuTrigger asChild className="max-w-[100px] h-7">
-                <Button variant="outline">Chose</Button>
+                <Button variant="outline">Seleccionar</Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56">
-                <DropdownMenuLabel>Panel Position</DropdownMenuLabel>
+                <DropdownMenuLabel>Panel de posición</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuRadioGroup
                 // value="top"

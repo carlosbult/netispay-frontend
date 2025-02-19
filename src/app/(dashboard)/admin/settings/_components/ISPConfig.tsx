@@ -1,10 +1,11 @@
 import { buttonVariants } from '@/components/ui/button';
 import { Badge } from '@components/ui/badge';
 import { Card, CardContent, CardFooter, CardHeader } from '@components/ui/card';
+import { type IISPConfig } from '@interfaces/isp';
 import { cn } from '@lib/utils';
 import { AlertTriangle, Pencil } from 'lucide-react';
 import Link from 'next/link';
-import { handlerGetMyIspConfig, type IISPConfig } from '../actions';
+import { handlerGetMyIspConfig } from '../actions';
 import ISPConfigForm from './ISPConfigForm';
 import SecretApiKey from './SecretApiKey';
 
@@ -16,11 +17,12 @@ interface IISPProps {
 const ISPConfig = async (props: IISPProps) => {
   const { update, id } = props;
   const IspConfig = await handlerGetMyIspConfig(id);
-  if ('errorCode' in IspConfig) {
+  if (IspConfig == null || 'errorCode' in IspConfig) {
     return (
       <div>
         <h1>Error</h1>
-        <p>{IspConfig.message}</p>
+        <p>Ha ocurrido un error al obtener la configuracion de tu ISP</p>
+        {IspConfig != null && <p>{IspConfig.message}</p>}
       </div>
     );
   }
@@ -86,12 +88,14 @@ const ISPConfig = async (props: IISPProps) => {
                   <span className="text-muted-foreground">Status:</span>
                   <Badge
                     variant={
-                      currentIspConfig.isp[0].is_active
+                      currentIspConfig.isp[0].is_active === true
                         ? 'default'
                         : 'destructive'
                     }
                   >
-                    {currentIspConfig.isp[0].is_active ? 'Active' : 'Inactive'}
+                    {currentIspConfig.isp[0].is_active === true
+                      ? 'Active'
+                      : 'Inactive'}
                   </Badge>
                 </div>
               </div>
@@ -101,7 +105,9 @@ const ISPConfig = async (props: IISPProps) => {
         <CardFooter className="border-t border-border/25 bg-muted-foreground px-6 py-4 rounded-b-md">
           <p className="text-xs text-muted">
             Ultima Actualización:{' '}
-            {new Date(currentIspConfig.isp[0].created_at).toLocaleDateString()}
+            {new Date(
+              currentIspConfig.isp[0].created_at as string,
+            ).toLocaleDateString()}
           </p>
         </CardFooter>
       </Card>

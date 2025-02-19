@@ -16,6 +16,7 @@ import {
 import { Switch } from '@components/ui/switch';
 import { useToast } from '@components/ui/use-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { type IISPConfig } from '@interfaces/isp';
 import updateIspConfigAdapter from '@lib/adapters/updateIspConfigAdapter';
 import {
   ispConfigSchema,
@@ -25,7 +26,7 @@ import { Eye, EyeOff } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { handlerUpdateIspConfig, type IISPConfig } from '../actions';
+import { handlerUpdateIspConfig } from '../actions';
 
 const ISPConfigForm = ({
   data,
@@ -55,11 +56,19 @@ const ISPConfigForm = ({
   async function onSubmit(values: TIspConfigSchema) {
     // Here you would typically send the updated data to your API
     console.log(updateIspConfigAdapter(values, data));
-    const adapterData = updateIspConfigAdapter(values, data);
-    const response = await handlerUpdateIspConfig(
-      adapterData,
-      data.id.toString(),
+    const adapterData: Partial<IISPConfig> = updateIspConfigAdapter(
+      values,
+      data,
     );
+    const response = await handlerUpdateIspConfig(adapterData, String(data.id));
+    if (response == null) {
+      toast({
+        title: 'Error',
+        description: 'An error occurred while updating the ISP',
+        variant: 'destructive',
+      });
+      return;
+    }
     if ('errorCode' in response) {
       toast({
         title: `Error al actualizar los datos`,

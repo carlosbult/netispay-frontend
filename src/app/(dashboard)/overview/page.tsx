@@ -38,9 +38,31 @@ const ClientPage = async ({
   const clientBalance = await handlerGetUserBalance(user.user.id);
   const bankPaymentProducts = await handlerGetPaymentMethods();
   const bankPaymentMethods =
-    typeof bankPaymentProducts === 'object' && 'products' in bankPaymentProducts
+    typeof bankPaymentProducts === 'object' &&
+    bankPaymentProducts != null &&
+    'products' in bankPaymentProducts
       ? bankPaymentProducts.products.BANK_TRANSFER
       : null;
+
+  console.log('invoices', invoices);
+
+  if (invoices == null) {
+    return (
+      <MaxWidthWrapper className="flex items-center justify-center">
+        <div className="w-full min-h-screen flex items-center justify-center">
+          <div className="-mt-14 max-w-[500px] mx-auto w-full space-y-4 px-2">
+            <h1 className="text-2xl font-bold text-center">
+              ¡Ocurrió un error!
+            </h1>
+            <p className="text-muted-foreground md:text-pretty text-center">
+              Hubo un error al cargar las facturas. Por favor, intenta
+              nuevamente.
+            </p>
+          </div>
+        </div>
+      </MaxWidthWrapper>
+    );
+  }
 
   if ('errorCode' in invoices) {
     // console.error('Error fetching invoices:', result.message);
@@ -111,7 +133,7 @@ const ClientPage = async ({
                   <BillingCardContainer invoices={invoices.invoices} />
                 </CardContent>
                 <CardFooter>
-                  {'errorCode' in allInvoices ? (
+                  {allInvoices == null || 'errorCode' in allInvoices ? (
                     <div>
                       <p className="text-red-500">
                         Hubo un error al cargar las facturas. Por favor, intenta

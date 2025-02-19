@@ -45,7 +45,7 @@ const data = {
       items: [],
     },
     {
-      title: 'Settings',
+      title: 'Configuraciones',
       url: '#',
       icon: Settings2,
       items: [
@@ -59,12 +59,12 @@ const data = {
         },
         {
           title: 'Comisiones',
-          url: '/admin/settings?section=commissions-config',
+          url: '/admin/settings/commissions',
         },
       ],
     },
     {
-      title: 'Clients',
+      title: 'Clientes',
       url: '#',
       icon: Bot,
       items: [
@@ -83,7 +83,7 @@ const data = {
       ],
     },
     {
-      title: 'Documentation',
+      title: 'Documentación',
       url: '#',
       icon: BookOpen,
       items: [

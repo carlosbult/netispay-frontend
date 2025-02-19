@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { usePayInvoiceStore } from '@/store/use-payment';
 import {
   Card,
   CardContent,
@@ -12,9 +13,7 @@ import {
 import { Separator } from '@components/ui/separator';
 import { type BankPaymentProduct } from '@interfaces/paymentMethods.interface';
 import { ArrowLeft, type LucideProps } from 'lucide-react';
-import { useState } from 'react';
 import Icons from 'src/components/Icons';
-import { useInvoiceSelection } from 'src/shared/store/useInvoiceSelection';
 import CurrencyCard from './CurrencyCards';
 import PaymentMethodContainer from './PayMethodContainer';
 
@@ -24,51 +23,38 @@ interface IStepByStepPaymentProps {
 
 const StepByStepPayment = (props: IStepByStepPaymentProps) => {
   const { bankProducts } = props;
-  const { selectedInvoices, totalAmount } = useInvoiceSelection();
-  const [paymentType, setPaymentType] = useState<string | null>(null);
   const payPalIcon = (props: LucideProps) => Icons.PayPal(props);
   const binanceIcon = (props: LucideProps) => Icons.Binance(props);
   const bankTransfer = (props: LucideProps) => Icons.CreditCard(props);
+  const {
+    categoryPayment,
+    addCategoryPaymentMethodState,
+    removeCategoryPaymentMethodState,
+  } = usePayInvoiceStore();
+
+  // useEffect(() => {
+  //   if (categoryPayment != null) {
+  //     addCategoryPaymentMethodState(categoryPayment);
+  //   }
+  // }, [categoryPayment]);
 
   return (
-    <Card>
+    <Card className="h-fit">
       <CardHeader>
-        <CardTitle>Current Billing</CardTitle>
+        <CardTitle>Seleccione un método de pago</CardTitle>
         <CardDescription>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua.
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div>
-          <ul className="space-y-1 text-sm ">
-            {selectedInvoices.map((invoice) => (
-              <li
-                key={invoice.invoiceId}
-                className="transition-all duration-300"
-              >
-                <strong>Invoice ID:</strong> {invoice.invoiceId}
-              </li>
-            ))}
-          </ul>
-          <div className="flex flex-col items-end">
-            <span>
-              <strong>SubTotal: </strong>
-              {totalAmount.subTotal}
-            </span>
-            <span>
-              <strong>Total: </strong>
-              {totalAmount.total}
-            </span>
-          </div>
-        </div>
-        {paymentType != null ? (
+        {categoryPayment != null ? (
           <div>
             <Button
               variant="outline"
               className="mt-4"
               onClick={() => {
-                setPaymentType(null);
+                removeCategoryPaymentMethodState();
               }}
             >
               <ArrowLeft className="mr-2 h-4 w-4" /> Back
@@ -80,34 +66,34 @@ const StepByStepPayment = (props: IStepByStepPaymentProps) => {
               icon={payPalIcon}
               name="PayPal"
               callBack={() => {
-                setPaymentType('payPal');
+                addCategoryPaymentMethodState('payPal');
               }}
             />
             <CurrencyCard
               icon={binanceIcon}
               name="Binance"
               callBack={() => {
-                setPaymentType('binance');
+                addCategoryPaymentMethodState('binance');
               }}
             />
             <CurrencyCard
               icon={bankTransfer}
-              name="Bank Transfer"
+              name="Transferencia Bancaria"
               callBack={() => {
-                setPaymentType('bank-transfer');
+                addCategoryPaymentMethodState('bank-transfer');
               }}
             />
           </div>
         )}
 
-        {paymentType != null && (
+        {categoryPayment != null && (
           <PaymentMethodContainer
-            method={paymentType}
+            method={categoryPayment}
             bankProducts={bankProducts}
           />
         )}
       </CardContent>
-      {paymentType != null ? null : (
+      {categoryPayment != null ? null : (
         <CardFooter className="flex flex-col">
           <div className="flex items-center justify-center w-full mb-4">
             <Separator className=" w-[40%] opacity-35" />

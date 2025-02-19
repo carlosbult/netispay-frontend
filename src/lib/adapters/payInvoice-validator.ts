@@ -1,70 +1,63 @@
-interface PaymentData {
-  orderId: string;
-  amount: number;
-  currency: string;
-  exchangeRate: number;
-  date: Date;
-  startTime?: string;
-  endTime?: string;
-}
+import {
+  type IInvoiceDetailsToPay,
+  type IPayInvoiceGeneric,
+} from '@interfaces/payment';
 
-interface Invoice {
-  id: string;
-  amount: number;
-}
-
-interface InputData {
-  userId: number;
-  bankCode: string;
-  productType: string;
-  expectedAmount: number;
-  allowPartialPayment: boolean;
-  balanceApplied: number;
-  paymentData: PaymentData;
-  invoices: Invoice[];
-}
-
-export interface IPayInvoiceAdapter {
-  userId: number;
-  bankCode: string;
-  productType: string;
-  expectedAmount: number;
-  allowPartialPayment: boolean;
-  balanceApplied: number;
-  paymentData: PaymentData;
-  invoices: Invoice[];
-}
-
-const payInvoiceAdapter = (input: InputData) => {
-  const oneDayMs = 24 * 60 * 60 * 1000;
+const payInvoiceAdapter = (
+  userId: number,
+  payMethodName: string,
+  payMethodCode: string,
+  payData: {
+    expectedAmount: number;
+    allowPartialPayment: boolean;
+    balanceApplied: number;
+    amountPayByTheUser: number;
+    currencyUseToPay: string;
+    exchangeRate: number;
+  },
+  payVariableData: {
+    bankCode?: string;
+    otp?: string;
+    transactionDate?: Date;
+    documentId?: string;
+    email?: string;
+    phoneNumber?: string;
+    reference?: string;
+    ipClient?: string;
+  },
+  invoices: IInvoiceDetailsToPay[],
+): IPayInvoiceGeneric => {
+  // const oneDayMs = 24 * 60 * 60 * 1000;
 
   // Calculate the previous day and the next day
-  const previousDay = new Date(input.paymentData.date.getTime() - oneDayMs);
-  const nextDay = new Date(input.paymentData.date.getTime() + oneDayMs);
+  // const previousDay = new Date(form.paymentData.date.getTime() - oneDayMs);
+  // const nextDay = new Date(form.paymentData.date.getTime() + oneDayMs);
 
   // Format the dates as "MM/DD/YYYY"
-  const formatDate = (d: Date): string =>
-    `${String(d.getMonth() + 1).padStart(2, '0')}/${String(d.getDate()).padStart(2, '0')}/${d.getFullYear()}`;
+  // const formatDate = (d: Date): string =>
+  //   `${String(d.getMonth() + 1).padStart(2, '0')}/${String(d.getDate()).padStart(2, '0')}/${d.getFullYear()}`;
 
   return {
-    userId: input.userId,
-    bankCode: input.bankCode,
-    productType: input.productType,
-    expectedAmount: input.expectedAmount,
-    allowPartialPayment: input.allowPartialPayment,
-    balanceApplied: input.balanceApplied,
+    userId,
+    bankCode: payMethodCode,
+    productType: payMethodName,
+    expectedAmount: payData.expectedAmount,
+    allowPartialPayment: payData.allowPartialPayment,
+    balanceApplied: payData.balanceApplied,
     paymentData: {
-      startTime: formatDate(previousDay),
-      endTime: formatDate(nextDay),
-      orderId: input.paymentData.orderId,
-      amount: input.paymentData.amount,
-      currency: input.paymentData.currency,
-      exchangeRate: input.paymentData.exchangeRate,
+      amount: payData.amountPayByTheUser,
+      currency: payData.currencyUseToPay,
+      exchangeRate: payData.exchangeRate,
+      bankCode: payVariableData.bankCode,
+      otp: payVariableData.otp,
+      transactionDate: payVariableData.transactionDate,
+      documentId: payVariableData.documentId,
+      email: payVariableData.email,
+      phoneNumber: payVariableData.phoneNumber,
+      reference: payVariableData.reference,
+      ipClient: payVariableData.ipClient,
     },
-    invoices: input.invoices.map((invoice) => ({
-      id: invoice.id,
-      amount: invoice.amount,
-    })),
+    invoices,
   };
 };
 

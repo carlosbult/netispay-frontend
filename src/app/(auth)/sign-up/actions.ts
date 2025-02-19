@@ -2,6 +2,7 @@
 
 import { adaptSignUpData } from '@lib/adapters/createClientUser-validator';
 import createUser from '@lib/request/auth_request';
+import { type TCommissionSchema } from '@lib/validators/commissionsUpdate-validator';
 import { type TSignUpValidator } from '@lib/validators/register-validator';
 
 export interface IHandlerResponseToToast {
@@ -9,6 +10,7 @@ export interface IHandlerResponseToToast {
   title: string;
   description: string;
   message: string | unknown;
+  updatedConfig?: TCommissionSchema;
 }
 
 export const handlerCreateUser = async (

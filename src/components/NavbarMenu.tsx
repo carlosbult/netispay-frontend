@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 'use client';
 
 import { buttonVariants } from '@/components/ui/button';
@@ -9,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu';
-import handlerLogOut from '@lib/sessionLogOut';
+import { closeSessionOnServer } from '@lib/auth';
 import { cn } from '@lib/utils';
 import { CircleUser } from 'lucide-react';
 import Link from 'next/link';
@@ -18,13 +19,18 @@ import { useRouter } from 'next/navigation';
 const NavbarMenu = () => {
   const router = useRouter();
 
+  const closeSession = async () => {
+    await closeSessionOnServer();
+    router.push('/sign-in');
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
         as-child="true"
         className={cn(
           buttonVariants({
-            variant: 'secondary',
+            variant: 'default',
             size: 'icon',
             className: 'rounded-full',
           }),
@@ -33,23 +39,18 @@ const NavbarMenu = () => {
         <CircleUser className="h-5 w-5" />
         <span className="sr-only">Toggle user menu</span>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+      <DropdownMenuContent align="end" className="bg-card">
+        <DropdownMenuLabel>Mi cuenta</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
           <Link href="/accounting" className="w-full h-full">
-            Settings
+            Configuraciones
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem>Support</DropdownMenuItem>
+        <DropdownMenuItem>Soporte</DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onClick={() => {
-            handlerLogOut(router);
-          }}
-          className="cursor-pointer"
-        >
-          Logout
+        <DropdownMenuItem onClick={closeSession} className="cursor-pointer">
+          Cerrar sesión
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

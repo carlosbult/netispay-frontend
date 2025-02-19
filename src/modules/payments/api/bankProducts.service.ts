@@ -1,16 +1,16 @@
-import { ApiService, API_BASE_URL } from '@services/api/api.service';
+import { API_BASE_URL, ApiService } from '@lib/request/apiRequest';
 import {
-  type getBankProductParams,
-  type BankProductsResponse,
-} from '../types/paymentProducts.interface';
+  type ProcessPaymentRequest,
+  type ProcessPaymentResponse,
+} from '../types/payment.types';
 import {
   type PaymentCalculatorRequest,
   type PaymentCalculatorResponse,
 } from '../types/paymentCalculation.interface';
 import {
-  type ProcessPaymentRequest,
-  type ProcessPaymentResponse,
-} from '../types/payment.types';
+  type BankProductsResponse,
+  type getBankProductParams,
+} from '../types/paymentProducts.interface';
 
 const apiService = new ApiService(API_BASE_URL);
 

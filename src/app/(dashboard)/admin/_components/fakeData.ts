@@ -1,63 +1,18 @@
 import { faker } from '@faker-js/faker';
+import {
+  type CurrencyType,
+  type IClientProfile,
+  type IInvoicePayment,
+  type ITransaction,
+  type PaymentStatus,
+  type PaymentType,
+  type TypeOfPerson,
+} from '@interfaces/transactions';
 
 // Define types
-type PaymentType = 'CREDIT_CARD' | 'BANK_TRANSFER' | 'CASH';
-type CurrencyType = 'USD' | 'EUR' | 'VES';
-type PaymentStatus = 'PENDING' | 'COMPLETED' | 'FAILED';
-type TypeOfPerson = 'INDIVIDUAL' | 'COMPANY';
-
-interface ClientProfile {
-  id: number;
-  network_manager_user_id: number;
-  user_id: number;
-  isp_id?: number | null;
-  name?: string;
-  dni?: string;
-  phone?: string;
-  address?: string;
-  type_of_person: TypeOfPerson;
-  invoice_payments: InvoicePayment[];
-  configuration: unknown[];
-  client_balance: unknown[];
-}
-
-interface InvoicePayment {
-  id: number;
-  invoice_id: string;
-  transaction_id: number;
-  network_manager: string;
-  payment_type: PaymentType;
-  amount: number;
-  invoice_data: object;
-  client_profile_id?: number | null;
-  admin_profile_id?: number | null;
-  created_at: Date;
-  client_profile?: ClientProfile;
-  admin_profile?: unknown;
-  balance_movement: unknown[];
-  transactionsId?: number;
-}
-
-export interface Transaction {
-  id: number;
-  bank_product_id: number;
-  dolar_rate_id: number;
-  bank_reference?: string | null;
-  intermediate_id?: string | null;
-  amount: number;
-  currency: CurrencyType;
-  payment_status: PaymentStatus;
-  error_code?: string | null;
-  error_message?: string | null;
-  bank_response: object;
-  month_year: string;
-  created_at: Date;
-  invoice_payments: InvoicePayment[];
-  client_balance: unknown[];
-}
 
 // Function to generate fake client profiles
-function generateFakeClientProfile(): ClientProfile {
+function generateFakeClientProfile(): IClientProfile {
   return {
     id: faker.number.int({ min: 1, max: 1000 }),
     network_manager_user_id: faker.number.int({ min: 1, max: 10000 }),
@@ -82,8 +37,8 @@ function generateFakeClientProfile(): ClientProfile {
 // Function to generate fake invoice payments
 function generateFakeInvoicePayments(
   transactionId: number,
-  clientProfile: ClientProfile,
-): InvoicePayment {
+  clientProfile: IClientProfile,
+): IInvoicePayment {
   return {
     id: faker.number.int({ min: 1, max: 1000 }),
     invoice_id: faker.string.uuid(),
@@ -109,7 +64,7 @@ function generateFakeInvoicePayments(
 }
 
 // Function to generate fake transactions
-export function generateFakeTransactions(count: number = 10): Transaction[] {
+export function generateFakeTransactions(count: number = 10): ITransaction[] {
   return Array.from({ length: count }, () => {
     const transactionId = faker.number.int({ min: 1, max: 1000 });
     const clientProfile = generateFakeClientProfile();
@@ -130,7 +85,7 @@ export function generateFakeTransactions(count: number = 10): Transaction[] {
       currency: faker.helpers.arrayElement<CurrencyType>(['USD', 'EUR', 'VES']),
       payment_status: faker.helpers.arrayElement<PaymentStatus>([
         'PENDING',
-        'COMPLETED',
+        'SUCCESS',
         'FAILED',
       ]),
       error_code: faker.datatype.boolean()

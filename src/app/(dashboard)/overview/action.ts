@@ -1,74 +1,35 @@
 'use server';
 
-import { type ApiErrorResponse } from '@interfaces/errors.interface';
-import { type Invoice } from '@interfaces/invoice.interface';
-import { type BankPaymentProduct } from '@interfaces/paymentMethods.interface';
+import {
+  type ICalculateMontToPay,
+  type IPayInvoiceGeneric,
+  type IPaymentResult,
+} from '@interfaces/payment';
 import { getSessionTokenOnServer } from '@lib/auth';
+import { getPaymentMethods } from '@lib/request/bank_request';
+import {
+  calculateMontToPay,
+  payInvoice,
+  type IMontToPay,
+} from '@lib/request/payment_request';
 import { requestUserLogged } from '@lib/request/server/getUserLogged';
+import { requestGetInvoices } from '@lib/request/transactions_request';
+import { getUserById } from '@lib/request/user_request';
 import { cookies } from 'next/headers';
 
 //* Interfaces
-export interface IInvoiceResponseSuccessfully {
-  invoices: Invoice[];
-}
-export interface IBankPaymentMethodResponseSuccessfully {
-  products: {
-    BANK_TRANSFER: BankPaymentProduct[];
-  };
-}
-type IResponseSuccessfully =
-  | ApiErrorResponse
-  | IBankPaymentMethodResponseSuccessfully;
-
-//* Constants
-const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 //* Get invoices from the API
 export const handlerGetInvoices = async (userId: string, status?: string) => {
-  const url = `${baseUrl}/invoices?id=${userId}${status != null ? `&status=${status}` : ''} `;
-
-  const response = await fetch(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-    },
-    cache: 'no-store',
-  });
-
-  if (!response.ok) {
-    const errorResponse: ApiErrorResponse = await response.json();
-    return errorResponse;
-  }
-
-  const successfullyResponse: IInvoiceResponseSuccessfully =
-    await response.json();
-  return successfullyResponse;
+  const response = await requestGetInvoices({ userId, status });
+  return response;
 };
 
 //* Get bank payment methods from the API
-export const handlerGetPaymentMethods =
-  async (): Promise<IResponseSuccessfully> => {
-    const url = `${baseUrl}/bank-products`;
-
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      cache: 'no-store',
-    });
-
-    if (!response.ok) {
-      const errorResponse: ApiErrorResponse = await response.json();
-      return errorResponse;
-    }
-
-    const successfullyResponse: IBankPaymentMethodResponseSuccessfully =
-      await response.json();
-    return successfullyResponse;
-  };
+export const handlerGetPaymentMethods = async () => {
+  const response = await getPaymentMethods();
+  return response;
+};
 
 //* Get user session token from cookies
 export const handlerGetUserSession = async () => {
@@ -105,4 +66,66 @@ export const handlerGetUserSession = async () => {
 
     return null; // Return null or a fallback value in case of an error
   }
+};
+
+export const handlerGetMountToPay = async (
+  data: IMontToPay,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): Promise<ICalculateMontToPay | null> => {
+  const response = await calculateMontToPay(data);
+  if (response == null) {
+    console.error('Error calculating the mount to pay');
+    return null;
+  }
+  if ('errorCode' in response) {
+    console.error('Error calculating the mount to pay');
+    return null;
+  }
+  return response;
+};
+
+// interface IPaymentResultResponse extends IHandlerResponseToToast {
+//   paymentResult?: IPaymentResult;
+// }
+
+export const handlerPayInvoices = async (
+  data: IPayInvoiceGeneric,
+): Promise<IPaymentResult | null> => {
+  console.log('data a enviar para pagar', data);
+  const response = await payInvoice(data);
+  console.log('response pay', response);
+  if (response != null) {
+    if ('networkManagerResponse' in response) {
+      return response.paymentResult;
+    }
+    return response;
+  } else {
+    return null;
+  }
+};
+
+export const handlerGetUserBalance = async (
+  userId: number,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): Promise<{
+  totalBalance: number;
+}> => {
+  const response = await getUserById(userId);
+  if (response == null) {
+    console.error('Error calculating the mount to pay');
+    return {
+      totalBalance: 0,
+    };
+  }
+  if ('errorCode' in response) {
+    console.error('Error calculating the mount to pay');
+    return {
+      totalBalance: 0,
+    };
+  }
+  const balance = response.client_profile.client_balance
+    .filter((element) => element.status === 'AVAILABLE')
+    .reduce((total, balance) => total + balance.current_amount, 0);
+
+  return { totalBalance: balance };
 };

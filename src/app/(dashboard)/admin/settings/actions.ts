@@ -1,20 +1,13 @@
 'use server';
 
-import { type ApiErrorResponse } from '@interfaces/errors.interface';
+import { type IISPConfig } from '@interfaces/isp';
 import { type BankPaymentProduct } from '@interfaces/paymentMethods.interface';
-import { requestGetTransaction } from '@lib/request/server/getTransactions';
-import updateBankProduct from '@lib/request/server/updateBankProduct';
-import updateIspConfig from '@lib/request/server/updateIspConfig';
-
-export interface IBankPaymentMethodResponseSuccessfully {
-  products: {
-    BANK_TRANSFER: BankPaymentProduct[];
-  };
-}
-
-type IBankPaymentMethodResponse =
-  | ApiErrorResponse
-  | IBankPaymentMethodResponseSuccessfully;
+import {
+  getPaymentMethods,
+  updatePaymentMethod,
+} from '@lib/request/bank_request';
+import { getIspConfig, updateIspConfig } from '@lib/request/isp_request';
+import { requestGetTransaction } from '@lib/request/transactions_request';
 
 export interface IIsp {
   id: number;
@@ -27,72 +20,21 @@ export interface IIsp {
   updated_at: string | null;
 }
 
-export interface IISPConfig {
-  id: number;
-  name: string;
-  api_url: string;
-  api_key: string;
-  isp: IIsp[];
-}
-
-type IResponseSuccessfully = ApiErrorResponse | (IISPConfig[] | IISPConfig);
-
-//*
-//* Constants
-//*
-const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 //*
 //* Get invoices from the API
 //*
 export const handlerGetMyIspConfig = async (id?: string) => {
-  let url = `${baseUrl}/settings/network-manager`;
-  if (id != null) {
-    url = `${url}/${id}`;
-  }
-
-  const response = await fetch(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-    },
-    cache: 'no-store',
-  });
-
-  if (!response.ok) {
-    const errorResponse: ApiErrorResponse = await response.json();
-    return errorResponse;
-  }
-
-  const successfullyResponse: IResponseSuccessfully = await response.json();
-  return successfullyResponse;
+  const response = await getIspConfig(id);
+  return response;
 };
 
 //*
 //* Get bank payment methods from the API
 //*
-export const handlerGetPaymentMethods =
-  async (): Promise<IBankPaymentMethodResponse> => {
-    const url = `${baseUrl}/bank-products`;
-
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      cache: 'no-store',
-    });
-
-    if (!response.ok) {
-      const errorResponse: ApiErrorResponse = await response.json();
-      return errorResponse;
-    }
-
-    const successfullyResponse: IBankPaymentMethodResponseSuccessfully =
-      await response.json();
-    return successfullyResponse;
-  };
+export const handlerGetPaymentMethods = async () => {
+  const response = await getPaymentMethods();
+  return response;
+};
 
 //*
 //* Update isp config
@@ -111,7 +53,7 @@ export const handlerUpdateBankProduct = async (
   data: Partial<BankPaymentProduct>,
   id: string,
 ) => {
-  const response = await updateBankProduct(data, id);
+  const response = await updatePaymentMethod(data, id);
   return response;
 };
 
@@ -123,5 +65,15 @@ export const handlerGetTransactions = async (limit: number, offset: number) => {
     limit,
     offset,
   });
+  if (response == null) {
+    return {
+      transactions: [],
+    };
+  }
+  if ('errorCode' in response) {
+    return {
+      transactions: [],
+    };
+  }
   return response;
 };

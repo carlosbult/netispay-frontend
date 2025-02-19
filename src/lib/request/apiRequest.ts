@@ -19,7 +19,7 @@ class ApiService {
     } catch (e) {
       console.error('Failed to parse error response', e);
     }
-
+    console.error('Error response:', errorData);
     throw new CustomApiError(
       errorData?.message ?? 'Unknown error',
       errorData?.statusCode ?? response.status ?? 500,
@@ -116,6 +116,18 @@ class ApiService {
   ): Promise<T> {
     return await this.request<T>(endpoint, {
       method: 'PUT',
+      body: JSON.stringify(data),
+      headers,
+    });
+  }
+
+  async patch<T>(
+    endpoint: string,
+    data: Record<string, unknown>,
+    headers: HeadersInit = {},
+  ): Promise<T> {
+    return await this.request<T>(endpoint, {
+      method: 'PATCH',
       body: JSON.stringify(data),
       headers,
     });

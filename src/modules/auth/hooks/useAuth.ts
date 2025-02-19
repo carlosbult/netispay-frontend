@@ -1,3 +1,4 @@
+import { useAuthStore } from '@/store/useAuthStore';
 import {
   type LoginCredentials,
   type LoginResponse,
@@ -5,7 +6,6 @@ import {
 import { useMutation, type UseMutationResult } from '@tanstack/react-query';
 import { type CustomApiError } from 'src/interfaces/errors.interface';
 import { useToast } from 'src/shared/components/ui/use-toast';
-import { useAuthStore } from 'src/shared/store/useAuthStore';
 import { authService } from '../api/auth.service';
 import {
   type GenerateLoginOTPResponse,

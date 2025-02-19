@@ -53,6 +53,7 @@ const LoginForm = () => {
   const onSubmit = async (formData: TLoginSchemaValidator) => {
     const response = await handlerLoginAction(formData);
     if (response.success) {
+      console.log('response en login', response);
       if (response.data.data.session.userRole === 'ADMIN') {
         toast({
           title: 'Inicio de sesión exitoso',
@@ -129,6 +130,7 @@ const LoginForm = () => {
                   >
                     Tu Contraseña
                     <button
+                      type="button"
                       className="flex items-center justify-center"
                       onClick={() => {
                         setPasswordVisible((prev) => !prev);

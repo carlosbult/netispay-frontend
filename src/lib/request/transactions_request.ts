@@ -22,13 +22,13 @@ export async function requestGetTransaction(params: {
     }
     const path = '/invoices/transactions';
     const { limit, offset } = params;
-    const url = new URL(`${path}`);
-    url.searchParams.append('limit', limit.toString());
-    url.searchParams.append('offset', offset.toString());
-    console.log('url', url.toString());
+    const queryParams: Record<string, string> = {
+      limit: limit.toString(),
+      offset: offset.toString(),
+    };
     const response = await api.get<ITransactionResponseSuccessfully>(
-      url.toString(),
-      undefined,
+      path,
+      queryParams,
       {
         Cookie: `${token.name}=${token.value}`,
       },
@@ -51,21 +51,24 @@ export async function requestGetInvoices(params: {
     if (token == null) {
       return null;
     }
-    const path = '/invoices';
+
     const { userId, status } = params;
-    const url = new URL(`${path}`);
-    url.searchParams.append('user_id', userId.toString());
+    const queryParams: Record<string, string> = { id: userId };
+
     if (status != null) {
-      url.searchParams.append('status', status.toString());
+      queryParams.status = status;
     }
-    console.log('url', url.toString());
+
     const response = await api.get<IInvoiceResponseSuccessfully>(
-      url.toString(),
-      undefined,
+      '/invoices',
+      queryParams, // Parámetros se envían aquí
       {
         Cookie: `${token.name}=${token.value}`,
       },
     );
+
+    console.log('response de invoices', response);
+
     return response;
   } catch (error) {
     console.error('Error when get the invoices', error);

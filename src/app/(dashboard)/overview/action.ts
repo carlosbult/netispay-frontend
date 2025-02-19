@@ -91,6 +91,7 @@ export const handlerGetMountToPay = async (
 export const handlerPayInvoices = async (
   data: IPayInvoiceGeneric,
 ): Promise<IPaymentResult | null> => {
+  console.log('data a enviar para pagar', data);
   const response = await payInvoice(data);
   console.log('response pay', response);
   if (response != null) {

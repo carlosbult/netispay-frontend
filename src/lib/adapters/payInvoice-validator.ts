@@ -49,7 +49,7 @@ const payInvoiceAdapter = (
       currency: payData.currencyUseToPay,
       exchangeRate: payData.exchangeRate,
       bankCode: payVariableData.bankCode,
-      otp: payVariableData.bankCode,
+      otp: payVariableData.otp,
       transactionDate: payVariableData.transactionDate,
       documentId: payVariableData.documentId,
       email: payVariableData.email,

@@ -55,6 +55,7 @@ export async function payInvoice(
     if (token == null) {
       return null;
     }
+
     const response = await api.post<IPaymentResponse | IPaymentResult>(
       `/invoices/payInvoice`,
       data,

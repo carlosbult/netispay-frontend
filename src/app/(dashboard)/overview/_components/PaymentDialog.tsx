@@ -32,7 +32,7 @@ import {
 } from '@interfaces/paymentMethods.interface';
 import payInvoiceAdapter from '@lib/adapters/payInvoice-validator';
 import { type TC2PValidator } from '@lib/validators/c2p-validator';
-import { AlertCircle, CreditCard } from 'lucide-react';
+import { AlertCircle, CreditCard, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { handlerGetUserSession, handlerPayInvoices } from '../action';
 import ShowsSuccessPayResults from './ShowSuccessPayResults';
@@ -51,7 +51,7 @@ const PaymentDialog = (props: IPaymentDialogProps) => {
   const { methodId, calculateToPayData, payUsingBalance } =
     usePayInvoiceStore();
   const [paymentStatus, setPaymentStatus] = useState<
-    'SUCCESS' | 'FAILED' | null
+    'SUCCESS' | 'FAILED' | 'PENDING' | null
   >(null);
   const [paymentResult, setPaymentResult] = useState<IPaymentResult | null>(
     null,
@@ -60,67 +60,71 @@ const PaymentDialog = (props: IPaymentDialogProps) => {
   // const { toast } = useToast();
 
   const handlePayment = async () => {
-    if (formData == null) return;
-    const user = await handlerGetUserSession();
-    const userId = user?.user.id;
-    if (userId == null) return;
-    if (calculateToPayData == null) return;
-    const selectedMethod = paymentMethod.find(
-      (element) => element.id === methodId,
-    );
-    if (selectedMethod == null) return;
-    const invoicesToPay: IInvoiceDetailsToPay[] = selectedInvoices.map(
-      (invoice) => {
-        return {
-          id: invoice.invoiceId.toString(),
-          amount: invoice.total,
-        };
-      },
-    );
-    //  ** use and adapter for the information
-    const adapterData = payInvoiceAdapter(
-      userId,
-      selectedMethod?.name,
-      selectedMethod?.banks.code,
-      {
-        expectedAmount: calculateToPayData.originalAmount,
-        allowPartialPayment: calculateToPayData?.allowPartialPayment ?? false,
-        balanceApplied: payUsingBalance ? calculateToPayData.balanceApplied : 0,
-        amountPayByTheUser: payUsingBalance
-          ? calculateToPayData.amount
-          : calculateToPayData.originalAmount,
-        currencyUseToPay: calculateToPayData.currency,
-        exchangeRate: calculateToPayData.exchangeRate,
-      },
-      {
-        bankCode: formData.bank_code,
-        otp: formData.otp,
-        documentId: formData.document_id,
-        phoneNumber: formData.phone_number,
-      },
-      invoicesToPay,
-    );
-    setPaymentStatus('SUCCESS');
-    const response = await handlerPayInvoices(adapterData);
-    console.log(response);
-    if (response == null) {
-      setPaymentStatus('FAILED');
+    try {
+      setPaymentStatus('PENDING');
+      if (formData == null) return;
+      const user = await handlerGetUserSession();
+      const userId = user?.user.id;
+      if (userId == null) return;
+      if (calculateToPayData == null) return;
+      const selectedMethod = paymentMethod.find(
+        (element) => element.id === methodId,
+      );
+      if (selectedMethod == null) return;
+      const invoicesToPay: IInvoiceDetailsToPay[] = selectedInvoices.map(
+        (invoice) => {
+          return {
+            id: invoice.invoiceId.toString(),
+            amount: invoice.total,
+          };
+        },
+      );
 
-      return;
-    } else if (!response.success) {
-      setPaymentResult(response);
-      setTimeout(() => {
+      //  ** use and adapter for the information
+      const adapterData = payInvoiceAdapter(
+        userId,
+        selectedMethod?.name,
+        selectedMethod?.banks.code,
+        {
+          expectedAmount: calculateToPayData.originalAmount,
+          allowPartialPayment: calculateToPayData?.allowPartialPayment ?? false,
+          balanceApplied: payUsingBalance
+            ? calculateToPayData.balanceApplied
+            : 0,
+          amountPayByTheUser: payUsingBalance
+            ? calculateToPayData.amount
+            : calculateToPayData.originalAmount,
+          currencyUseToPay: calculateToPayData.currency,
+          exchangeRate: calculateToPayData.exchangeRate,
+        },
+        {
+          bankCode: formData.bank_code,
+          otp: formData.otp,
+          documentId: formData.document_id,
+          phoneNumber: formData.phone_number,
+        },
+        invoicesToPay,
+      );
+      console.log('adapterData', adapterData);
+
+      const response = await handlerPayInvoices(adapterData);
+
+      if (response == null) {
         setPaymentStatus('FAILED');
-      }, 500);
-      return;
-    } else {
-      setPaymentResult(response);
-      setTimeout(() => {
-        setPaymentStatus('SUCCESS');
-      }, 500);
-    }
+        return;
+      }
 
-    console.log('this is the info for the pay', adapterData);
+      if (response.success) {
+        setPaymentResult(response);
+        setPaymentStatus('SUCCESS');
+      } else {
+        setPaymentResult(response);
+        setPaymentStatus('FAILED');
+      }
+    } catch (error) {
+      console.error('Payment error:', error);
+      setPaymentStatus('FAILED');
+    }
   };
 
   return (
@@ -131,25 +135,36 @@ const PaymentDialog = (props: IPaymentDialogProps) => {
         </button>
       </DialogTrigger> */}
       <DialogContent className="sm:max-w-[425px]">
-        {paymentStatus != null ? (
+        {paymentStatus === 'PENDING' ? (
+          <div className="flex flex-col items-center justify-center gap-4 py-8">
+            <Loader2 className="h-12 w-12 animate-spin text-primary" />
+            <div className="text-center">
+              <h3 className="text-lg font-semibold">Procesando tu pago</h3>
+              <p className="text-muted-foreground">
+                Esto puede tomar unos segundos...
+              </p>
+            </div>
+          </div>
+        ) : paymentStatus != null ? (
           <ShowsSuccessPayResults
             state={paymentStatus}
             paymentResult={paymentResult}
+            setPaymentStatus={setPaymentStatus}
             setIsOpen={setIsOpen}
           />
         ) : (
           <>
             <DialogHeader>
-              <DialogTitle>Payment Details</DialogTitle>
+              <DialogTitle>Detalles de pago</DialogTitle>
               <DialogDescription>
-                Review your payment information before proceeding.
+                Revisa tus datos de pago antes de proceder.
               </DialogDescription>
             </DialogHeader>
             {calculateToPayData != null && formData != null && (
               <div className="grid gap-4 py-4">
                 <div className="items-center gap-4">
                   <Label htmlFor="amount" className="text-right">
-                    Amount
+                    Monto
                   </Label>
                   <Input
                     id="amount"
@@ -163,7 +178,7 @@ const PaymentDialog = (props: IPaymentDialogProps) => {
                 </div>
                 <div className="items-center gap-4">
                   <Label htmlFor="bank" className="text-right">
-                    Bank
+                    Banco
                   </Label>
                   <Input
                     id="bank"
@@ -198,14 +213,14 @@ const PaymentDialog = (props: IPaymentDialogProps) => {
 
             <Alert>
               <AlertCircle className="h-4 w-4" />
-              <AlertTitle>Invoices to Pay</AlertTitle>
+              <AlertTitle>Facturas para pagar</AlertTitle>
               <AlertDescription>
                 {selectedInvoices != null ? (
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead className="w-[100px]">Invoice ID</TableHead>
-                        <TableHead>Amount</TableHead>
+                        <TableHead className="w-[100px]">ID Factura</TableHead>
+                        <TableHead>Monto</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -214,13 +229,13 @@ const PaymentDialog = (props: IPaymentDialogProps) => {
                           <TableCell className="font-medium">
                             {invoice.invoiceId}
                           </TableCell>
-                          <TableCell>{`${calculateToPayData?.currency} ${invoice.total.toFixed(2)}`}</TableCell>
+                          <TableCell>{`$ ${invoice.total.toFixed(2)}`}</TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
                   </Table>
                 ) : (
-                  <p>No invoices to pay</p>
+                  <p>Sin facturas para pagar</p>
                 )}
               </AlertDescription>
             </Alert>
@@ -231,7 +246,7 @@ const PaymentDialog = (props: IPaymentDialogProps) => {
                   void handlePayment();
                 }}
               >
-                <CreditCard className="mr-2 h-4 w-4" /> Proceed to Payment
+                <CreditCard className="mr-2 h-4 w-4" /> Pagar
               </Button>
             </DialogFooter>
           </>

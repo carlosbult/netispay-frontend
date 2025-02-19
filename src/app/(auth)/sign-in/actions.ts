@@ -5,7 +5,7 @@ import {
   type LoginCredentials,
 } from '@interfaces/auth.interface';
 import { loginUser } from '@lib/request/auth_request';
-import getUserById from '@lib/request/client/getUserById';
+import { getUserById } from '@lib/request/user_request';
 import { cookies } from 'next/headers';
 
 interface ICookiesData {
@@ -36,7 +36,7 @@ export async function handlerLoginAction(
     let userRole;
     let userId;
     const user = await getUserById(response.data.session.userId);
-    if (user != null) {
+    if (user != null && !('errorCode' in user)) {
       response.data.session.userRole = user.role;
       userId = user.id;
       userRole = user.role;

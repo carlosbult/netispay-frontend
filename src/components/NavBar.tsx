@@ -1,5 +1,6 @@
 'use client';
 
+import { usePayInvoiceStore } from '@/store/use-payment';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from 'src/lib/utils';
@@ -10,9 +11,21 @@ import NavbarMenu from './NavbarMenu';
 const NavBar = () => {
   // const router = useRouter()
   const pathname = usePathname();
+  const { clientBalance } = usePayInvoiceStore();
+  const publicRoutes = [
+    '/sign-in',
+    '/sign-up',
+    '/forgot-password',
+    '/reset-password',
+  ];
+
   if (pathname.includes('/admin')) {
     return null;
   }
+
+  // useEffect(() => {
+  //   // get local storage
+  // }, []);
 
   return (
     <div
@@ -25,10 +38,12 @@ const NavBar = () => {
           <Icons.logoIsoTipo className="w-[150px]" />
         </Link>
         <div className="flex items-center gap-2">
-          <div className="flex ">
-            {/* <span>Balance: </span>
-            <span className="ml-2">0.0 $</span> */}
-          </div>
+          {!publicRoutes.some((route) => pathname.includes(route)) && (
+            <div className="flex ">
+              <span>Balance: </span>
+              <span className="ml-2">{clientBalance.toFixed(2)} $</span>
+            </div>
+          )}
           <NavbarMenu />
         </div>
       </MaxWidthWrapper>

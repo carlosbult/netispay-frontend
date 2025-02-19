@@ -41,6 +41,7 @@ export interface ClientProfile {
   phone: string;
   address: string;
   type_of_person: string;
+  client_balance: IClientBalance[];
   configuration: UserConfiguration[];
   isp: {
     network_manager: {
@@ -55,6 +56,26 @@ export interface UserResponse {
   role: string;
   is_authenticated: boolean;
   last_login: string | null;
+  is_active: boolean;
+  is_deleted: boolean;
+  client_profile: ClientProfile;
+}
+
+export interface IClientBalance {
+  id: number;
+  initial_amount: number;
+  current_amount: number;
+  status: string;
+  created_at: Date;
+  updated_at: Date;
+}
+
+export interface IUser {
+  id: number;
+  email: string;
+  role: string;
+  is_authenticated: boolean;
+  last_login: Date | null;
   is_active: boolean;
   is_deleted: boolean;
   client_profile: ClientProfile;

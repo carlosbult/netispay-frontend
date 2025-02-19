@@ -9,6 +9,8 @@ interface TPayInvoiceState {
   categoryPayment: string | null;
   typePaymentMethod: string | null;
   calculateToPayData: ICalculateMontToPay | null;
+  clientBalance: number;
+  payUsingBalance: boolean;
   clearPayInvoiceState: () => void;
   addPayInvoiceIdMethodState: (id: number) => void;
   removePayInvoiceMethodIdState: () => void;
@@ -17,6 +19,10 @@ interface TPayInvoiceState {
   addTypePaymentMethodState: (typePaymentMethod: string) => void;
   removeTypePaymentMethodState: () => void;
   addCalculateToPayData: (calculateToPayData: ICalculateMontToPay) => void;
+  removeCalculateToPayData: () => void;
+  addClientBalance: (clientBalance: number) => void;
+  removeClientBalance: () => void;
+  updatePayUsingBalance: (payUsingBalance: boolean) => void;
 }
 
 export const usePayInvoiceStore = create<TPayInvoiceState>()(
@@ -27,7 +33,8 @@ export const usePayInvoiceStore = create<TPayInvoiceState>()(
       categoryPayment: null,
       typePaymentMethod: null,
       calculateToPayData: null,
-
+      clientBalance: 0,
+      payUsingBalance: false,
       // functions
       // payment method id
       addPayInvoiceIdMethodState: (id) => {
@@ -73,12 +80,32 @@ export const usePayInvoiceStore = create<TPayInvoiceState>()(
           calculateToPayData: null,
         });
       },
+      // client balance
+      addClientBalance: (clientBalance) => {
+        set({
+          clientBalance,
+        });
+      },
+      removeClientBalance: () => {
+        set({
+          clientBalance: 0,
+        });
+      },
+
+      // pay using balance
+      updatePayUsingBalance: (payUsingBalance) => {
+        set({
+          payUsingBalance,
+        });
+      },
       clearPayInvoiceState: () => {
         set({
           methodId: null,
           categoryPayment: null,
           typePaymentMethod: null,
           calculateToPayData: null,
+          clientBalance: 0,
+          payUsingBalance: false,
         });
       },
     }),

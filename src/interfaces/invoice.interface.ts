@@ -39,3 +39,7 @@ export interface InvoiceSelectionStore {
   totalAmount: TotalAmount;
   clearSelection: () => void;
 }
+
+export interface IInvoiceResponseSuccessfully {
+  invoices: Invoice[];
+}

@@ -9,7 +9,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@components/ui/card';
+import { Label } from '@components/ui/label';
 import { Separator } from '@components/ui/separator';
+import { Switch } from '@components/ui/switch';
 import { useCallback, useEffect, useRef } from 'react';
 import { handlerGetMountToPay } from '../action';
 
@@ -22,8 +24,10 @@ const PaymentDetailsCard = () => {
     methodId,
     clearPayInvoiceState,
     addCalculateToPayData,
-    removeTypePaymentMethodState,
+    // removeTypePaymentMethodState,
     calculateToPayData,
+    updatePayUsingBalance,
+    payUsingBalance,
   } = usePayInvoiceStore();
   const previousRequestRef = useRef<{
     amountUSD: number;
@@ -50,12 +54,12 @@ const PaymentDetailsCard = () => {
 
   useEffect(() => {
     if (selectedInvoices.length === 0) {
-      removeTypePaymentMethodState(); // ✅ Reset payment data if no invoices are selected
+      // removeTypePaymentMethodState(); // ✅ Reset payment data if no invoices are selected
       return;
     }
 
     if (methodId === null) {
-      removeTypePaymentMethodState(); // ✅ Reset payment data if no invoices are selected
+      // removeTypePaymentMethodState(); // ✅ Reset payment data if no invoices are selected
       return;
     }
 
@@ -125,6 +129,36 @@ const PaymentDetailsCard = () => {
           <Separator />
           {calculateToPayData != null ? (
             <div className="space-y-2">
+              {calculateToPayData.operationCost && (
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">
+                    Costo de la operación:
+                  </span>
+                  <span className="font-medium">
+                    {calculateToPayData.details.systemCommission}{' '}
+                    <span className="font-normal text-muted-foreground">
+                      {calculateToPayData.currency === 'VES' ? 'Bs.' : '$'}
+                    </span>
+                  </span>
+                </div>
+              )}
+              <div className="flex justify-between text-sm">
+                <Label
+                  htmlFor="balance-pay-mode"
+                  className="text-muted-foreground"
+                >
+                  Usar tu balance actual para pagar:
+                </Label>
+                <span className="">
+                  <Switch
+                    id="balance-pay-mode"
+                    checked={payUsingBalance}
+                    onCheckedChange={(checked) => {
+                      updatePayUsingBalance(checked);
+                    }}
+                  />
+                </span>
+              </div>
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Tasa de cambio:</span>
                 <span className="font-medium">
@@ -143,6 +177,8 @@ const PaymentDetailsCard = () => {
                   </span>
                 </span>
               </div>
+              <Separator />
+
               <div className="flex justify-between text-sm">
                 <span className=" text-muted-foreground">
                   Sub total a pagar:
@@ -154,15 +190,53 @@ const PaymentDetailsCard = () => {
                   </span>
                 </span>
               </div>
-              <div className="flex justify-between text-lg font-semibold">
-                <span>Total:</span>
-                <span className="font-medium">
-                  {calculateToPayData.originalAmount}{' '}
-                  <span className="font-normal text-muted-foreground">
-                    {calculateToPayData.currency === 'VES' ? 'Bs.' : '$'}
+              {payUsingBalance ? (
+                <>
+                  <div className="flex justify-between text-sm">
+                    <span className=" text-muted-foreground">
+                      Total a pagar original:
+                    </span>
+                    <span className="font-medium">
+                      {calculateToPayData.originalAmount}{' '}
+                      <span className="font-normal text-muted-foreground">
+                        {calculateToPayData.currency === 'VES' ? 'Bs.' : '$'}
+                      </span>
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className=" text-muted-foreground">
+                      Balance aplicado:
+                    </span>
+                    <span className="font-medium">
+                      - {calculateToPayData.balanceApplied}{' '}
+                      <span className="font-normal text-muted-foreground">
+                        {calculateToPayData.currency === 'VES' ? 'Bs.' : '$'}
+                      </span>
+                    </span>
+                  </div>
+                </>
+              ) : (
+                <div className="flex justify-between text-lg font-semibold">
+                  <span>Total:</span>
+                  <span className="font-medium">
+                    {calculateToPayData.originalAmount}{' '}
+                    <span className="font-normal text-muted-foreground">
+                      {calculateToPayData.currency === 'VES' ? 'Bs.' : '$'}
+                    </span>
                   </span>
-                </span>
-              </div>
+                </div>
+              )}
+              {payUsingBalance && (
+                <div className="flex justify-between text-lg font-semibold">
+                  <span>Total a pagar usando el balance:</span>
+                  <span className="font-medium">
+                    {calculateToPayData.amount}{' '}
+                    <span className="font-normal text-muted-foreground">
+                      {calculateToPayData.currency === 'VES' ? 'Bs.' : '$'}
+                    </span>
+                  </span>
+                </div>
+              )}
               {/* <div className="flex justify-between">
                 <span className="text-sm text-muted-foreground">
                   Total a pagar:

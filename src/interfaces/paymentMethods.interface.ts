@@ -39,3 +39,9 @@ export interface BankPaymentProduct {
 export interface IBankPaymentProductAdapter extends BankPaymentProduct {
   properties: IBankProductSpecificConfig[];
 }
+
+export interface IBankPaymentMethodResponseSuccessfully {
+  products: {
+    BANK_TRANSFER: BankPaymentProduct[];
+  };
+}

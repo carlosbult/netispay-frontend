@@ -105,22 +105,25 @@ export const DataTable = (props: DataTableProps) => {
                 <TableRow className="bg-card" key={element.id}>
                   <TableCell>
                     <div className="font-medium">
-                      {element.invoice_payments[0].client_profile?.name}
+                      {/* {element.invoice_payments[0].client_profile?.name} */}
+                      no disponible
                     </div>
                     <div className="hidden text-sm text-muted-foreground md:inline">
                       <span className="flex">
                         <span className="mr-2">ISP user Id:</span>
                         <span className="font-bold">
-                          {element.invoice_payments[0].client_profile?.isp_id}
+                          {/* {element.invoice_payments[0].client_profile?.isp_id} */}
+                          no disponible
                         </span>
                       </span>
                     </div>
                   </TableCell>
                   <TableCell className="hidden sm:table-cell">
-                    {element.invoice_payments[0].payment_type}
+                    {/* {element.invoice_payments[0].payment_type} */}
+                    no disponible
                   </TableCell>
                   <TableCell className="hidden sm:table-cell">
-                    {element.payment_status === 'COMPLETED' && (
+                    {element.payment_status === 'SUCCESS' && (
                       <Badge className="text-xs" variant="default">
                         Fulfilled
                       </Badge>
@@ -143,7 +146,8 @@ export const DataTable = (props: DataTableProps) => {
                     {element.currency}
                   </TableCell>
                   <TableCell className="text-right">
-                    {element.invoice_payments[0].amount}
+                    {/* {element.invoice_payments[0].amount} */}
+                    no disponible
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end">

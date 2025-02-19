@@ -6,6 +6,8 @@ import {
 import {
   type ICalculateMontToPay,
   type IPayInvoiceGeneric,
+  type IPaymentResponse,
+  type IPaymentResult,
 } from '@interfaces/payment';
 import { getSessionTokenOnServer } from '@lib/auth';
 import { API_BASE_URL, ApiService } from './apiRequest';
@@ -47,15 +49,19 @@ export async function calculateMontToPay(
 
 export async function payInvoice(
   data: IPayInvoiceGeneric,
-): Promise<any | ApiErrorResponse | CustomApiError | null> {
+): Promise<IPaymentResponse | IPaymentResult | null> {
   try {
     const token = await getSessionTokenOnServer();
     if (token == null) {
       return null;
     }
-    const response = await api.post<any>(`/invoices/payInvoice`, data, {
-      Cookie: `${token.name}=${token.value}`,
-    });
+    const response = await api.post<IPaymentResponse | IPaymentResult>(
+      `/invoices/payInvoice`,
+      data,
+      {
+        Cookie: `${token.name}=${token.value}`,
+      },
+    );
     return response;
   } catch (error) {
     console.error('Error paying the invoice', error);

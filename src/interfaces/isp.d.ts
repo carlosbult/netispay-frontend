@@ -30,3 +30,11 @@ export interface ICommissionISPConfig {
   updated_at: string | null; // ISO 8601 date string
   isp: ICommissionISP;
 }
+
+export interface IISPConfig {
+  id: number;
+  name: string;
+  api_url: string;
+  api_key: string;
+  isp: IIsp[];
+}

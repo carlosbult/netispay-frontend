@@ -109,15 +109,19 @@ export const handlerGetUserBalance = async (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<{
   totalBalance: number;
-} | null> => {
+}> => {
   const response = await getUserById(userId);
   if (response == null) {
     console.error('Error calculating the mount to pay');
-    return null;
+    return {
+      totalBalance: 0,
+    };
   }
   if ('errorCode' in response) {
     console.error('Error calculating the mount to pay');
-    return null;
+    return {
+      totalBalance: 0,
+    };
   }
   const balance = response.client_profile.client_balance
     .filter((element) => element.status === 'AVAILABLE')

@@ -1,6 +1,6 @@
 import {
+  CustomApiError,
   type ApiErrorResponse,
-  type CustomApiError,
 } from '@interfaces/errors.interface';
 import { type IInvoiceResponseSuccessfully } from '@interfaces/invoice.interface';
 import { type ITransactionResponseSuccessfully } from '@interfaces/transactions';
@@ -72,6 +72,9 @@ export async function requestGetInvoices(params: {
     return response;
   } catch (error) {
     console.error('Error when get the invoices', error);
+    if (error instanceof CustomApiError) {
+      return error;
+    }
     return null;
   }
 }

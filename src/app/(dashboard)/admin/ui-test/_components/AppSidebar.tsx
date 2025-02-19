@@ -45,7 +45,7 @@ const data = {
       items: [],
     },
     {
-      title: 'Settings',
+      title: 'Configuraciones',
       url: '#',
       icon: Settings2,
       items: [
@@ -64,7 +64,7 @@ const data = {
       ],
     },
     {
-      title: 'Clients',
+      title: 'Clientes',
       url: '#',
       icon: Bot,
       items: [
@@ -83,7 +83,7 @@ const data = {
       ],
     },
     {
-      title: 'Documentation',
+      title: 'Documentación',
       url: '#',
       icon: BookOpen,
       items: [

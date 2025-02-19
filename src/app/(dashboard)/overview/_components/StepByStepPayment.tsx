@@ -41,7 +41,7 @@ const StepByStepPayment = (props: IStepByStepPaymentProps) => {
   return (
     <Card className="h-fit">
       <CardHeader>
-        <CardTitle>Seleccioné un método de pago</CardTitle>
+        <CardTitle>Seleccione un método de pago</CardTitle>
         <CardDescription>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua.
@@ -78,7 +78,7 @@ const StepByStepPayment = (props: IStepByStepPaymentProps) => {
             />
             <CurrencyCard
               icon={bankTransfer}
-              name="Bank Transfer"
+              name="Transferencia Bancaria"
               callBack={() => {
                 addCategoryPaymentMethodState('bank-transfer');
               }}

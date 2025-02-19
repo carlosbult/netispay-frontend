@@ -32,6 +32,8 @@ export const DataTable = (props: DataTableProps) => {
   //   },
   // });
 
+  console.log('data: ', data);
+
   return (
     <div className="flex flex-col h-[calc(100vh-17rem)] ">
       <div className="rounded-lg flex-1 overflow-hidden flex flex-col">
@@ -89,15 +91,17 @@ export const DataTable = (props: DataTableProps) => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Customer</TableHead>
+                <TableHead>Cliente</TableHead>
+
+                <TableHead className="hidden sm:table-cell">Banco</TableHead>
                 <TableHead className="hidden sm:table-cell">
-                  Bank Product
+                  Producto Bancario
                 </TableHead>
-                <TableHead className="hidden sm:table-cell">Status</TableHead>
-                <TableHead className="hidden md:table-cell">Date</TableHead>
-                <TableHead className="text-right">Currency</TableHead>
-                <TableHead className="text-right">Amount</TableHead>
-                <TableHead className="sr-only">action</TableHead>
+                <TableHead className="hidden sm:table-cell">Estado</TableHead>
+                <TableHead className="hidden md:table-cell">Fecha</TableHead>
+                <TableHead className="text-right">Moneda</TableHead>
+                <TableHead className="text-right">Monto</TableHead>
+                <TableHead className="sr-only">Acciones</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -105,50 +109,49 @@ export const DataTable = (props: DataTableProps) => {
                 <TableRow className="bg-card" key={element.id}>
                   <TableCell>
                     <div className="font-medium">
-                      {/* {element.invoice_payments[0].client_profile?.name} */}
-                      no disponible
+                      {element.client_profile.name}
                     </div>
                     <div className="hidden text-sm text-muted-foreground md:inline">
                       <span className="flex">
-                        <span className="mr-2">ISP user Id:</span>
+                        <span className="mr-2">
+                          {element.client_profile.isp.network_manager.name} ID:
+                        </span>
                         <span className="font-bold">
-                          {/* {element.invoice_payments[0].client_profile?.isp_id} */}
-                          no disponible
+                          {element.client_profile.network_manager_user_id}
                         </span>
                       </span>
                     </div>
                   </TableCell>
                   <TableCell className="hidden sm:table-cell">
-                    {/* {element.invoice_payments[0].payment_type} */}
-                    no disponible
+                    {element.bank_product.banks.name}
+                  </TableCell>
+                  <TableCell className="hidden sm:table-cell">
+                    {element.bank_product.name}
                   </TableCell>
                   <TableCell className="hidden sm:table-cell">
                     {element.payment_status === 'SUCCESS' && (
                       <Badge className="text-xs" variant="default">
-                        Fulfilled
+                        Pagado
                       </Badge>
                     )}
                     {element.payment_status === 'PENDING' && (
                       <Badge className="text-xs" variant="secondary">
-                        Pending
+                        Pendiente
                       </Badge>
                     )}
                     {element.payment_status === 'FAILED' && (
                       <Badge className="text-xs" variant="destructive">
-                        Failed
+                        Fallido
                       </Badge>
                     )}
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
-                    {element.month_year}
+                    {element.created_at.split('T')[0]}
                   </TableCell>
                   <TableCell className="text-right">
                     {element.currency}
                   </TableCell>
-                  <TableCell className="text-right">
-                    {/* {element.invoice_payments[0].amount} */}
-                    no disponible
-                  </TableCell>
+                  <TableCell className="text-right">{element.amount}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end">
                       <button className="text-blue-500 hover:text-blue-700">

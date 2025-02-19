@@ -53,34 +53,53 @@ const CommissionsDialog = (props: ICommissionDialogProps) => {
   const form = useForm<TCommissionSchema>({
     resolver: zodResolver(CommissionSchema),
     defaultValues: {
-      add_igtf: commissionConfig.add_igtf,
-      add_iva_usd: commissionConfig.add_iva_usd,
-      add_iva_ves: commissionConfig.add_iva_ves,
+      add_igtf: commissionConfig.add_igtf || false,
+      add_iva_usd: commissionConfig.add_iva_usd || false,
+      add_iva_ves: commissionConfig.add_iva_ves || false,
       iva_rate: commissionConfig.iva_rate,
       igtf_rate: commissionConfig.igtf_rate,
-      allow_partial_payment: commissionConfig.allow_partial_payment,
+      allow_partial_payment: commissionConfig.allow_partial_payment || false,
       commission_type: commissionConfig.commission_type,
     },
   });
 
   async function onSubmit(values: TCommissionSchema) {
-    const adapterData = updateISPCommissionAdapter(values, commissionConfig);
-    const updateCommission = await handlerUpdateISPCommission(
-      adapterData,
-      commissionConfig.id.toString(),
-    );
-    if (updateCommission.type === 'SUCCESS') {
-      toast({
-        title: updateCommission.title,
-        description: updateCommission.description,
-      });
-    } else if (updateCommission.type === 'ERROR') {
-      toast({
-        title: updateCommission.title,
-        description: updateCommission.description,
-        variant: 'destructive',
-      });
-    } else {
+    try {
+      console.log('Valores del formulario:', values);
+      const adapterData = updateISPCommissionAdapter(values, commissionConfig);
+      console.log('Datos enviados al adapter:', adapterData);
+
+      const updateCommission = await handlerUpdateISPCommission(
+        adapterData,
+        commissionConfig.id.toString(),
+      );
+      console.log('Respuesta del servidor:', updateCommission);
+
+      if (updateCommission.type === 'SUCCESS') {
+        toast({
+          title: updateCommission.title,
+          description: updateCommission.description,
+        });
+        form.reset({
+          ...values,
+        });
+        setIsOpen(false);
+      } else if (updateCommission.type === 'ERROR') {
+        toast({
+          title: updateCommission.title,
+          description: updateCommission.description,
+          variant: 'destructive',
+        });
+      } else {
+        toast({
+          title: 'Error Inesperado',
+          description:
+            'Ha ocurrido un error inesperado, verifica los datos o ponte en contacto con nuestro equipo ',
+          variant: 'destructive',
+        });
+      }
+    } catch (error) {
+      console.error('Error en onSubmit:', error);
       toast({
         title: 'Error Inesperado',
         description:
@@ -91,7 +110,15 @@ const CommissionsDialog = (props: ICommissionDialogProps) => {
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!open) {
+          form.reset();
+        }
+        setIsOpen(open);
+      }}
+    >
       <DialogTrigger asChild>
         <button className="hover:text-primary group transition-colors duration-300">
           <SquareArrowOutUpRight className="w-4 h-4" />
@@ -204,7 +231,10 @@ const CommissionsDialog = (props: ICommissionDialogProps) => {
                       <FormControl>
                         <Switch
                           checked={field.value}
-                          onCheckedChange={field.onChange}
+                          onCheckedChange={(checked) => {
+                            field.onChange(checked);
+                            void form.trigger('allow_partial_payment');
+                          }}
                         />
                       </FormControl>
                       <FormMessage />
@@ -230,7 +260,10 @@ const CommissionsDialog = (props: ICommissionDialogProps) => {
                       <FormControl>
                         <Switch
                           checked={field.value}
-                          onCheckedChange={field.onChange}
+                          onCheckedChange={(checked) => {
+                            field.onChange(checked);
+                            void form.trigger('add_igtf');
+                          }}
                         />
                       </FormControl>
                       <FormMessage />
@@ -248,15 +281,29 @@ const CommissionsDialog = (props: ICommissionDialogProps) => {
                         <FormLabel className="text-base">
                           Agregar IVA a los precios en USD
                         </FormLabel>
-                        <FormDescription>
-                          Lorem ipsum dolor sit amet consectetur adipisicing
-                          elit. Harum optio possimus quo.
+                        <FormDescription className="w-[90%]">
+                          <strong>Cuando está activo:</strong> Se agrega el IVA
+                          al precio en USD establecido por el administrador de
+                          red.
+                          <br />
+                          <br />
+                          <strong>Ejemplo:</strong>
+                          <br />
+                          Precio base $100 USD + 16% IVA = $116 USD total.
+                          <br />
+                          <br />
+                          <strong>Si está inactivo:</strong> Se mantiene el
+                          precio original en USD sin agregar IVA ($100 USD en el
+                          ejemplo).
                         </FormDescription>
                       </div>
                       <FormControl>
                         <Switch
                           checked={field.value}
-                          onCheckedChange={field.onChange}
+                          onCheckedChange={(checked) => {
+                            field.onChange(checked);
+                            void form.trigger('add_iva_usd');
+                          }}
                         />
                       </FormControl>
                       <FormMessage />
@@ -274,15 +321,30 @@ const CommissionsDialog = (props: ICommissionDialogProps) => {
                         <FormLabel className="text-base">
                           Agregar IVA a los precios en VES
                         </FormLabel>
-                        <FormDescription>
-                          Lorem ipsum dolor sit amet consectetur adipisicing
-                          elit. Harum optio possimus quo.
+                        <FormDescription className="w-[90%]">
+                          <strong>Cuando está activo:</strong> El precio en USD
+                          se convierte a VES usando la tasa BCV vigente, luego
+                          se agrega el IVA a este monto.
+                          <br />
+                          <br />
+                          <strong>Ejemplo:</strong>
+                          <br />
+                          $100 USD * tasa BCV (ej. 36 VES) = 3600 VES + 16% IVA
+                          = 4176 VES total.
+                          <br />
+                          <br />
+                          <strong>Si está inactivo:</strong> El precio en VES
+                          será directamente la conversión sin IVA (3600 VES en
+                          el ejemplo).
                         </FormDescription>
                       </div>
                       <FormControl>
                         <Switch
                           checked={field.value}
-                          onCheckedChange={field.onChange}
+                          onCheckedChange={(checked) => {
+                            field.onChange(checked);
+                            void form.trigger('add_iva_ves');
+                          }}
                         />
                       </FormControl>
                       <FormMessage />

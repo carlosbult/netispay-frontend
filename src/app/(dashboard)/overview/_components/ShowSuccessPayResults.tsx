@@ -7,39 +7,66 @@ import {
   DialogTitle,
 } from '@components/ui/dialog';
 import { type IPaymentResult } from '@interfaces/payment';
-import { AlertCircle, CheckCircle2, XCircle } from 'lucide-react';
+import { AlertCircle, CheckCircle2, XCircle, Loader2 } from 'lucide-react';
 
 interface IShowsSuccessPayResultsProps {
-  state: 'SUCCESS' | 'FAILED';
+  state: 'SUCCESS' | 'FAILED' | 'PENDING';
   paymentResult: IPaymentResult | null;
   setIsOpen: (isOpen: boolean) => void;
+  setPaymentStatus: (status: 'SUCCESS' | 'FAILED' | 'PENDING' | null) => void;
 }
 
 const ShowsSuccessPayResults = (props: IShowsSuccessPayResultsProps) => {
-  const { state, paymentResult, setIsOpen } = props;
+  const { state, paymentResult, setIsOpen, setPaymentStatus } = props;
   const isError = state === 'FAILED';
+  const isLoading = state === 'PENDING';
   const onClose = () => {
     setIsOpen(false);
+    setPaymentStatus(null);
   };
   return (
     <>
       <DialogHeader>
         <div className="w-full flex justify-center">
-          {isError ? (
+          {isLoading ? (
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          ) : isError ? (
             <XCircle className="h-8 w-8 text-destructive" />
           ) : (
             <CheckCircle2 className="h-8 w-8 text-success" />
           )}
         </div>
-        <DialogTitle>{isError ? 'Pago Fallido' : 'Pago Exitoso'}</DialogTitle>
+        <DialogTitle>
+          {isLoading
+            ? 'Procesando pago'
+            : isError
+              ? 'Pago Fallido'
+              : 'Pago Exitoso'}
+        </DialogTitle>
         <DialogDescription>
-          {isError
-            ? 'Hubo un problema con tu pago.'
-            : 'Tu pago se ha procesado correctamente.'}
+          {isLoading
+            ? 'Estamos verificando tu transacción con el banco'
+            : isError
+              ? 'Hubo un problema con tu pago'
+              : 'Tu pago se ha procesado correctamente.'}
         </DialogDescription>
       </DialogHeader>
       <div className="grid gap-4 py-4">
-        {paymentResult != null ? (
+        {isLoading ? (
+          <div className="space-y-4 py-4">
+            <Alert>
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>Transacción en proceso</AlertTitle>
+              <AlertDescription>
+                Por favor no cierres esta ventana. Estamos confirmando el pago
+                con la entidad financiera.
+              </AlertDescription>
+            </Alert>
+            <div className="flex justify-center">
+              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+            </div>
+          </div>
+        ) : paymentResult != null ? (
           <Alert variant={isError ? 'destructive' : 'default'}>
             <AlertTitle>
               {isError ? 'Detalles del Error' : 'Detalles del Pago'}
@@ -105,16 +132,15 @@ const ShowsSuccessPayResults = (props: IShowsSuccessPayResultsProps) => {
         )}
       </div>
       <DialogFooter>
-        <Button onClick={onClose}>
-          {isError ? (
-            <>
-              <AlertCircle className="mr-2 h-4 w-4" /> Cerrar
-            </>
+        <Button onClick={onClose} disabled={isLoading}>
+          {isLoading ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : isError ? (
+            <AlertCircle className="mr-2 h-4 w-4" />
           ) : (
-            <>
-              <CheckCircle2 className="mr-2 h-4 w-4" /> Listo
-            </>
+            <CheckCircle2 className="mr-2 h-4 w-4" />
           )}
+          {isLoading ? 'Procesando...' : isError ? 'Cerrar' : 'Listo'}
         </Button>
       </DialogFooter>
     </>

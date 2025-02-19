@@ -41,6 +41,7 @@ const MobilePayForm = (props: IMobilePayFormProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { addPayInvoiceIdMethodState, methodId } = usePayInvoiceStore();
   const [formValues, setFormValues] = useState<TC2PValidator | null>(null);
+  console.log('formValues', formValues);
   const form = useForm<TC2PValidator>({
     resolver: zodResolver(c2PValidator),
     defaultValues: {},
@@ -233,7 +234,7 @@ const MobilePayForm = (props: IMobilePayFormProps) => {
                   <Input
                     id="refNumber"
                     type="text"
-                    placeholder="123456789"
+                    placeholder="12345678"
                     className="h-12"
                     {...field}
                   />

@@ -67,8 +67,6 @@ export async function requestGetInvoices(params: {
       },
     );
 
-    console.log('response de invoices', response);
-
     return response;
   } catch (error) {
     console.error('Error when get the invoices', error);

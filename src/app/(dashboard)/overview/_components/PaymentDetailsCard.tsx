@@ -147,7 +147,7 @@ const PaymentDetailsCard = () => {
                   htmlFor="balance-pay-mode"
                   className="text-muted-foreground"
                 >
-                  Usar tu balance actual para pagar:
+                  Usar tu saldo actual para pagar:
                 </Label>
                 <span className="">
                   <Switch
@@ -205,7 +205,7 @@ const PaymentDetailsCard = () => {
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className=" text-muted-foreground">
-                      Balance aplicado:
+                      Saldo aplicado:
                     </span>
                     <span className="font-medium">
                       - {calculateToPayData.balanceApplied}{' '}
@@ -228,7 +228,7 @@ const PaymentDetailsCard = () => {
               )}
               {payUsingBalance && (
                 <div className="flex justify-between text-lg font-semibold">
-                  <span>Total a pagar usando el balance:</span>
+                  <span>Total a pagar usando el saldo:</span>
                   <span className="font-medium">
                     {calculateToPayData.amount}{' '}
                     <span className="font-normal text-muted-foreground">

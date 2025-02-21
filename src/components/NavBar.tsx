@@ -40,7 +40,7 @@ const NavBar = () => {
         <div className="flex items-center gap-2">
           {!publicRoutes.some((route) => pathname.includes(route)) && (
             <div className="flex ">
-              <span>Balance: </span>
+              <span>Saldo: </span>
               <span className="ml-2">{clientBalance.toFixed(2)} $</span>
             </div>
           )}

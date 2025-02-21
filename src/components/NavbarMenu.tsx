@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 'use client';
 
+import { usePayInvoiceStore } from '@/store/use-payment';
 import { buttonVariants } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -15,11 +16,12 @@ import { cn } from '@lib/utils';
 import { CircleUser } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-
 const NavbarMenu = () => {
   const router = useRouter();
+  const { clearPayInvoiceState } = usePayInvoiceStore();
 
   const closeSession = async () => {
+    clearPayInvoiceState();
     await closeSessionOnServer();
     router.push('/sign-in');
   };

@@ -57,25 +57,29 @@ const VerificationApiForm = (props: IVerificationApiFormProps) => {
       return;
     }
     console.log(
-      payInvoiceAdapter({
-        userId: idLocalStorage != null ? parseInt(idLocalStorage) : 0,
-        bankCode: paymentMethod.banks.code,
-        productType: paymentMethod.name,
-        expectedAmount: totalAmount.total,
-        allowPartialPayment: false,
-        balanceApplied: 0,
-        paymentData: {
-          date: data.transaction_date,
-          orderId: data.reference_number,
-          amount: data.amount,
+      payInvoiceAdapter(
+        idLocalStorage != null ? parseInt(idLocalStorage) : 0,
+        paymentMethod.banks.code,
+        paymentMethod.name,
+        {
+          expectedAmount: totalAmount.total,
+          allowPartialPayment: false,
+          balanceApplied: 0,
+          amountPayByTheUser: 0,
+          currencyUseToPay: 'USD',
           exchangeRate: 1,
+        },
+        {
+          transactionDate: data.transaction_date,
+          reference: data.reference_number,
+          amount: data.amount,
           currency: 'USD',
         },
-        invoices: selectedInvoices.map((invoice) => ({
+        selectedInvoices.map((invoice) => ({
           id: invoice.invoiceId.toString(),
           amount: invoice.total,
         })),
-      }),
+      ),
     );
     // toast({
     //   title: 'You submitted the following values:',
@@ -95,7 +99,7 @@ const VerificationApiForm = (props: IVerificationApiFormProps) => {
           name="transaction_date"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel>Date of Transaction</FormLabel>
+              <FormLabel>Fecha de la transacción</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>
@@ -109,7 +113,7 @@ const VerificationApiForm = (props: IVerificationApiFormProps) => {
                       {field.value != null ? (
                         format(field.value, 'PPP')
                       ) : (
-                        <span>Pick a date</span>
+                        <span>Seleccionar fecha</span>
                       )}
                       <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                     </Button>
@@ -128,7 +132,7 @@ const VerificationApiForm = (props: IVerificationApiFormProps) => {
                 </PopoverContent>
               </Popover>
               <FormDescription>
-                Please select the date of the transaction.
+                Por favor seleccione la fecha de la transacción.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -139,7 +143,7 @@ const VerificationApiForm = (props: IVerificationApiFormProps) => {
           name="reference_number"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel>Transaction reference</FormLabel>
+              <FormLabel>Referencia de la transacción</FormLabel>
               <FormControl>
                 <Input placeholder="xxxxxxxxxxxxxx" {...field} />
               </FormControl>
@@ -152,7 +156,7 @@ const VerificationApiForm = (props: IVerificationApiFormProps) => {
           name="amount"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel>Amount</FormLabel>
+              <FormLabel>Monto</FormLabel>
               <FormControl>
                 <Input placeholder="0.00" type="text" {...field} />
               </FormControl>
@@ -161,7 +165,7 @@ const VerificationApiForm = (props: IVerificationApiFormProps) => {
         />
 
         <Button className="w-full" type="submit">
-          Submit
+          Enviar
         </Button>
       </form>
     </Form>

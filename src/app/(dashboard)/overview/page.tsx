@@ -30,6 +30,7 @@ const ClientPage = async ({
   searchParams: Record<string, string | string[] | undefined>;
 }) => {
   const user = await handlerGetUserSession();
+
   if (user == null) {
     return <div>Error fetching user session</div>;
   }
@@ -43,8 +44,6 @@ const ClientPage = async ({
     'products' in bankPaymentProducts
       ? bankPaymentProducts.products.BANK_TRANSFER
       : null;
-
-  console.log('invoices', invoices);
 
   if (invoices == null) {
     return (
@@ -117,10 +116,54 @@ const ClientPage = async ({
             },
           ]}
         />
-        <ScrollArea className="h-[90vh] w-full">
-          <MaxWidthWrapper className="flex gap-10 pt-6">
-            <div className="space-y-8 max-w-[50%]">
-              <Card className="h-fit">
+        {/* <ScrollArea className="h-[90vh] w-full"> */}
+        <MaxWidthWrapper className="flex gap-10 pt-6">
+          <div className="space-y-8 w-[50%]">
+            <Card className="h-fit">
+              <CardContent>
+                <div className="flex flex-col gap-2 pt-4">
+                  <div className="flex justify-between gap-2">
+                    <p>Nombre: </p> {user.user.client_profile?.name}
+                  </div>
+
+                  <p>ID Mikrowisp: {user.user.client_profile?.network_manager_user_id}</p>
+                  <p>DNI: {user.user.client_profile?.dni}</p>
+                  <p>Email: {user.user.email}</p>
+                  <p>Teléfono: {user.user.client_profile?.phone}</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* <Card className="h-fit">
+                <CardHeader>
+                  <CardTitle>Selecciona tus facturas</CardTitle>
+                  <CardDescription>
+                    Aquí puedes ver y seleccionar las facturas que deseas pagar.
+                    Revisa los detalles y procede con el pago de forma segura y
+                    rápida.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <BillingCardContainer invoices={invoices.invoices} />
+                </CardContent>
+                <CardFooter>
+                  {allInvoices == null || 'errorCode' in allInvoices ? (
+                    <div>
+                      <p className="text-red-500">
+                        Hubo un error al cargar las facturas. Por favor, intenta
+                        nuevamente.
+                      </p>
+                    </div>
+                  ) : (
+                    <History invoices={allInvoices.invoices} />
+                  )}
+                </CardFooter>
+              </Card> */}
+            <PaymentDetailsCard />
+          </div>
+          <div className="w-[50%]">
+            <ScrollArea className="h-[90vh] w-full">
+              <Card className="h-fit mb-10">
                 <CardHeader>
                   <CardTitle>Selecciona tus facturas</CardTitle>
                   <CardDescription>
@@ -145,11 +188,11 @@ const ClientPage = async ({
                   )}
                 </CardFooter>
               </Card>
-              <PaymentDetailsCard />
-            </div>
-            <StepByStepPayment bankProducts={bankPaymentMethods ?? []} />
-          </MaxWidthWrapper>
-        </ScrollArea>
+              <StepByStepPayment bankProducts={bankPaymentMethods ?? []} />
+            </ScrollArea>
+          </div>
+        </MaxWidthWrapper>
+        {/* </ScrollArea> */}
       </div>
     );
   }

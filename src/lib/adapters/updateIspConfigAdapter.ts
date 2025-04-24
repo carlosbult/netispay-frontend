@@ -1,8 +1,6 @@
+import { type IISPConfig } from '@interfaces/isp';
 import { type TIspConfigSchema } from '@lib/validators/updateISPConfig-validator';
-import type {
-  IIsp,
-  IISPConfig,
-} from 'src/app/(dashboard)/admin/settings/actions';
+import type { IIsp } from 'src/app/(dashboard)/admin/settings/actions';
 
 const updateIspConfigAdapter = (
   newData: TIspConfigSchema,

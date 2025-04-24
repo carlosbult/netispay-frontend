@@ -1,6 +1,6 @@
 type PaymentType = 'CREDIT_CARD' | 'BANK_TRANSFER' | 'CASH';
 type CurrencyType = 'USD' | 'EUR' | 'VES';
-type PaymentStatus = 'PENDING' | 'SUCCESS' | 'FAILED';
+
 type TypeOfPerson = 'INDIVIDUAL' | 'COMPANY';
 
 interface IClientProfile {
@@ -16,6 +16,11 @@ interface IClientProfile {
   invoice_payments: IInvoicePayment[];
   configuration: unknown[];
   client_balance: unknown[];
+  isp: {
+    network_manager: {
+      name: string;
+    };
+  };
 }
 
 interface IInvoicePayment {
@@ -43,7 +48,7 @@ export interface ITransaction {
   intermediate_id?: string | null;
   amount: number;
   currency: CurrencyType;
-  payment_status: PaymentStatus;
+  payment_status: string;
   error_code?: string | null;
   error_message?: string | null;
   bank_response: object;
@@ -51,6 +56,18 @@ export interface ITransaction {
   created_at: Date;
   invoice_payments: IInvoicePayment[];
   client_balance: unknown[];
+  client_profile_id: number | null;
+  admin_profile_id: number | null;
+  // TO-DO
+  dolar_rate: unknown;
+  bank_product: {
+    name: string;
+    banks: {
+      name: string;
+    };
+  };
+  client_profile: IClientProfile | null;
+  admin_profile: IClientProfile | null;
 }
 
 interface ITransactionResponseSuccessfully {

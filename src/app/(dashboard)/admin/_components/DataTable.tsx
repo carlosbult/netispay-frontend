@@ -110,7 +110,11 @@ export const DataTable = (props: DataTableProps) => {
                     )}
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
-                    {element.created_at.toISOString().split('T')[0]}
+                    {typeof element.created_at === 'string' 
+                      ? element.created_at.split('T')[0] 
+                      : element.created_at instanceof Date 
+                        ? element.created_at.toISOString().split('T')[0]
+                        : new Date(element.created_at).toISOString().split('T')[0]}
                   </TableCell>
                   <TableCell className="text-right">
                     {element.currency}

@@ -126,7 +126,10 @@ const ClientPage = async ({
                     <p>Nombre: </p> {user.user.client_profile?.name}
                   </div>
 
-                  <p>ID Mikrowisp: {user.user.client_profile?.network_manager_user_id}</p>
+                  <p>
+                    ID Mikrowisp:{' '}
+                    {user.user.client_profile?.network_manager_user_id}
+                  </p>
                   <p>DNI: {user.user.client_profile?.dni}</p>
                   <p>Email: {user.user.email}</p>
                   <p>Teléfono: {user.user.client_profile?.phone}</p>
